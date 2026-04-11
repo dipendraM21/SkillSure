@@ -7,7 +7,9 @@ import { NavLink, useLocation } from 'react-router-dom'
 import IconCaretDown from '../../assets/Icon/IconCaretDown'
 import IconCaretsDown from '../../assets/Icon/IconCaretsDown'
 import IconMinus from '../../assets/Icon/IconMinus'
-import moltLogo from '../../assets/svg/molt.svg'
+import skillsureLogoFull from '../../assets/svg/skillsure-logo-full.svg'
+import skillsureLogoFullDark from '../../assets/svg/skillsure-logo-full-dark.svg'
+import skillsureLogoMark from '../../assets/svg/skillsure-logo-mark.svg'
 import { MENU_DATA } from '../../router/menuData'
 import { toggleSidebar } from '../../store/themeConfigSlice'
 import { hasUserPermission } from '@/components/crud/commonHelper/PermissionsCheck'
@@ -141,7 +143,15 @@ const Sidebar = () => {
         <div className="bg-white dark:bg-black h-full flex flex-col">
           <div className="flex justify-between items-center px-4 py-3">
             <NavLink to="/" className={`main-logo flex items-center shrink-0 ${isCollapsedForWidth ? 'justify-center w-full' : ''}`} viewTransition>
-              <img className={`${isCollapsedForWidth ? 'w-8' : 'w-24'} h-auto object-contain transition-all duration-300`} src={moltLogo} alt="logo" />
+              <img
+                className={
+                  isCollapsedForWidth
+                    ? 'h-10 w-10 object-contain transition-all duration-300'
+                    : 'max-w-[200px] w-full h-auto object-contain object-left transition-all duration-300'
+                }
+                src={isCollapsedForWidth ? skillsureLogoMark : semidark ? skillsureLogoFullDark : skillsureLogoFull}
+                alt="SkillSure"
+              />
             </NavLink>
 
             <button

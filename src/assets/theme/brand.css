@@ -1,0 +1,28 @@
+/*
+ * Skillsure Brand Guidelines (canonical)
+ * Colors: Deep Purple, Teal Green, Golden Yellow, Light Grey, Dark Grey
+ * Typography: Rubik — titles, headings, large text | Satoshi — body
+ */
+@theme {
+  --brand-deep-purple: #4427ad;
+  --brand-teal: #18ad99;
+  --brand-golden: #f4c84b;
+  --brand-light-grey: #f2f2f2;
+  --brand-dark-grey: #4f4f4f;
+
+  --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  --font-inter: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --brand-deep-purple: #4427ad;
+  --brand-teal: #18ad99;
+  --brand-golden: #f4c84b;
+  --brand-light-grey: #f2f2f2;
+  --brand-dark-grey: #4f4f4f;
+
+  --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  --font-inter: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+}

@@ -1,3 +1,5 @@
+import { getApiBaseUrl } from '@/lib/api/env'
+import { getSession } from '@/lib/auth/session'
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify'
@@ -8,12 +10,16 @@ const BaseUrl = {
   DEVELOPMENT: import.meta.env.VITE_DEVELOPMENT_URL,
 }
 
-export const API_BASE = BaseUrl[(import.meta.env.VITE_ENV as keyof typeof BaseUrl) || 'DEVELOPMENT']
+const legacyBase = BaseUrl[(import.meta.env.VITE_ENV as keyof typeof BaseUrl) || 'DEVELOPMENT']
+
+/** Prefer `VITE_API_BASE_URL` (SkillSure) when set; else legacy env-based base for recipe-style CRUD demos. */
+export const API_BASE = getApiBaseUrl() || legacyBase
 
 export const axiosApi = axios.create({ baseURL: API_BASE })
 
 axiosApi.interceptors.request.use((cfg: InternalAxiosRequestConfig) => {
-  const token = Cookies.get('token')
+  const session = getSession()
+  const token = session?.accessToken ?? Cookies.get('token')
   if (token) {
     cfg.headers['Authorization'] = `Bearer ${token}`
   }

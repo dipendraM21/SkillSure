@@ -98,7 +98,7 @@
 }
 
 @utility text-heading {
-  color: var(--color-black);
+  color: var(--brand-dark-grey);
   font-weight: 700;
 }
 
@@ -108,16 +108,16 @@
 
 @layer base {
   body {
-    @apply text-body fs-14 font-body font-normal;
+    @apply text-body fs-14 font-body font-normal antialiased;
   }
 
-  /* html element style */
+  /* Rubik only for headings (brand); Satoshi for all body UI */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply text-heading font-heading;
+    @apply text-heading font-heading antialiased;
   }
 }

@@ -311,3 +311,19 @@ const userData = {
 - **Form Fields:**
   - `name` (Text, Required)
   - `isLive` (Checkbox)
+
+---
+
+## SkillSure listing modules (common CRUD)
+
+These modules are registered in `src/config/crudModules.data.ts` and use the same list contract as above (`action`, `page`, `limit`, optional `search`, `sortBy`, `sortOrder`). List responses must expose `data.result` and `data.totalRecords` (see **List View**).
+
+Transport is implemented with `executeAjax` so list calls use `fetchAdminEmployersList` / `fetchCandidatesList` (local mocks when `VITE_API_BASE_URL` is unset; otherwise REST under `/v1/...`).
+
+| `apiName` (key) | `apiUrl` | UI route | `ModuleProvider` constant |
+|-----------------|----------|----------|---------------------------|
+| `skillsure-admin-employers` | `/v1/admin/employers` | Admin → Employers | `skillsureListingCrudApiNames.adminEmployers` |
+| `skillsure-admin-candidates` | `/v1/admin/candidates` | Admin → Candidates | `skillsureListingCrudApiNames.adminCandidates` |
+| `skillsure-employer-candidates` | `/v1/employer/candidates` | Employer → Candidates | `skillsureListingCrudApiNames.employerCandidates` |
+
+**Usage:** wrap the page in `<ModuleProvider apiName={skillsureListingCrudApiNames.adminEmployers}>` and load the grid with `useCommonCrudListData()` (same React Query wiring as `CommonCrudView`) or render `CommonCrudView` with TanStack column defs.

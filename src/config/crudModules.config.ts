@@ -35,6 +35,7 @@ function normalize(key: string, m: (typeof CRUD_MODULES_DATA)[string]) {
     menu: { label: m.menuLabel, icon: MENU_ICONS[m.menuIcon] ?? IconMenuPages },
     customUrls: m.customUrls,
     getRequestUrl: m.getRequestUrl,
+    executeAjax: m.executeAjax,
   }
 }
 
@@ -52,6 +53,7 @@ export function getCrudConfigFromModules(): Record<string, CrudConfigItem> {
       ...(m.formMode === 'PAGE' && { routes: { Form: m.formPath, pageRoute: m.listPath } }),
       ...(m.customUrls && { customUrls: m.customUrls }),
       ...(m.getRequestUrl && { getRequestUrl: m.getRequestUrl }),
+      ...(m.executeAjax && { executeAjax: m.executeAjax }),
     }
   }
   return config

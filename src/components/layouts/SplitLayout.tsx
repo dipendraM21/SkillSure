@@ -1,4 +1,4 @@
-import moltLogo from '@/assets/svg/molt.svg'
+import skillsureLogoFull from '@/assets/svg/skillsure-logo-full.svg'
 import React from 'react'
 
 interface SplitLayoutProps {
@@ -14,7 +14,7 @@ const SplitLayout = ({ image, children, className, rightSection, imageClassName 
       <div className={`flex flex-col min-h-screen bg-white relative ${className}`}>
         <div className="p-6 sm:p-8">
           <div className="flex items-center gap-3">
-            <img src={moltLogo} alt="Molt Logo" width={100} height={100} />
+            <img src={skillsureLogoFull} alt="SkillSure" className="h-9 w-auto max-w-[220px] object-contain object-left" />
           </div>
         </div>
         <div className="flex-1 flex items-center justify-center p-4 sm:p-0">{children}</div>

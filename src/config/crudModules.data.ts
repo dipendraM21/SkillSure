@@ -1,4 +1,9 @@
-import type { CustomCrudUrls, GetRequestUrlProps } from '@/types/commonCrud.types'
+import {
+  skillsureAdminCandidatesExecuteAjax,
+  skillsureAdminEmployersExecuteAjax,
+  skillsureEmployerCandidatesExecuteAjax,
+} from '@/lib/crud/skillsureCrudAjax'
+import type { CrudExecuteAjax, CustomCrudUrls, GetRequestUrlProps } from '@/types/commonCrud.types'
 
 /**
  * CRUD modules – minimal data only. No URLs duplication.
@@ -26,7 +31,16 @@ export interface CrudModuleInput {
   customUrls?: CustomCrudUrls
   /** Optional (advanced): function to return URL when customUrls is not enough. */
   getRequestUrl?: (props: GetRequestUrlProps) => string
+  /** Optional: custom transport (SkillSure list + mocks). */
+  executeAjax?: CrudExecuteAjax
 }
+
+/** `apiName` keys for SkillSure listing modules — use with `<ModuleProvider apiName={…}>`. */
+export const skillsureListingCrudApiNames = {
+  adminEmployers: 'skillsure-admin-employers',
+  adminCandidates: 'skillsure-admin-candidates',
+  employerCandidates: 'skillsure-employer-candidates',
+} as const
 
 /** All CRUD modules. Key = apiName (use kebab-case e.g. 'weekly-menu'). */
 export const CRUD_MODULES_DATA: Record<string, CrudModuleInput> = {
@@ -119,5 +133,34 @@ export const CRUD_MODULES_DATA: Record<string, CrudModuleInput> = {
     formMode: 'MODAL',
     menuLabel: 'Barcode Place',
     menuIcon: 'pages',
+  },
+
+  // —— SkillSure (listing modules; list data via `executeAjax` + CRUD_DOCUMENTATION-style query params)
+  [skillsureListingCrudApiNames.adminEmployers]: {
+    apiUrl: '/v1/admin/employers',
+    pageTitle: 'Employers',
+    permissionName: 'skillsure_admin_employers',
+    formMode: 'MODAL',
+    menuLabel: 'Employers',
+    menuIcon: 'contacts',
+    executeAjax: skillsureAdminEmployersExecuteAjax,
+  },
+  [skillsureListingCrudApiNames.adminCandidates]: {
+    apiUrl: '/v1/admin/candidates',
+    pageTitle: 'Candidates',
+    permissionName: 'skillsure_admin_candidates',
+    formMode: 'MODAL',
+    menuLabel: 'Candidates',
+    menuIcon: 'users',
+    executeAjax: skillsureAdminCandidatesExecuteAjax,
+  },
+  [skillsureListingCrudApiNames.employerCandidates]: {
+    apiUrl: '/v1/employer/candidates',
+    pageTitle: 'Candidates',
+    permissionName: 'skillsure_employer_candidates',
+    formMode: 'MODAL',
+    menuLabel: 'Candidates',
+    menuIcon: 'users',
+    executeAjax: skillsureEmployerCandidatesExecuteAjax,
   },
 }

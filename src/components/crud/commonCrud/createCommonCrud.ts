@@ -36,7 +36,15 @@ function applyCustomUrl(urlTemplate: string, id: string | number | undefined): s
   return urlTemplate.replace(/:id/g, String(id))
 }
 
-export const createCommonCrud = <TRecord = JsonObject>({ apiName, apiUrl, pageTitle, customUrls, getRequestUrl, ...otherArg }: CommonCrudConfig<TRecord>): CommonCrudApi<TRecord> => {
+export const createCommonCrud = <TRecord = JsonObject>({
+  apiName,
+  apiUrl,
+  pageTitle,
+  customUrls,
+  getRequestUrl,
+  executeAjax,
+  ...otherArg
+}: CommonCrudConfig<TRecord>): CommonCrudApi<TRecord> => {
   const { initialState = {}, reducers = {}, crudApi = {} } = otherArg ?? {}
 
   const moduleAjaxApi: CommonCrudApi<TRecord>['AjaxApi'] = <TResponse = unknown>(arg: CommonAjaxProps<JsonObject, TResponse>) => {
@@ -63,7 +71,11 @@ export const createCommonCrud = <TRecord = JsonObject>({ apiName, apiUrl, pageTi
       }) ??
       defaultUrl
 
-    return commonAjax<JsonObject, TResponse>({ ...arg, url, type: method })
+    const payload = { ...arg, url, type: method }
+    if (executeAjax) {
+      return executeAjax<TResponse>(payload)
+    }
+    return commonAjax<JsonObject, TResponse>(payload)
   }
 
   // main api reference store all handler and crud data and state

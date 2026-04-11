@@ -11,6 +11,7 @@
 @import './assets/css/components/dropdown.css';
 @import './assets/css/layout/sidebar.css';
 @import './assets/css/layout/header.css';
+@import './assets/theme/brand.css';
 @import './assets/theme/text.css';
 @import './assets/theme/colors.css';
 @import 'tw-animate-css';
@@ -18,60 +19,57 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* Brand typography — all UI uses body; headings use font-heading in base styles */
-  --font-body: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
-  --font-inter: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  /* Typography: Rubik + Satoshi — defined in brand.css */
 
-  --color-primary: #4427ad;
+  --color-primary: var(--brand-deep-purple);
+  /* Text on primary buttons/cards — explicit so utilities resolve ( :root --primary-foreground is separate ) */
+  --color-primary-foreground: #ffffff;
+  --color-primary-light: color-mix(in srgb, var(--brand-deep-purple) 14%, white);
+  --color-primary-dark-light: color-mix(in srgb, var(--brand-deep-purple) 15%, transparent);
 
-  --color-primary-light: #ebe4ff;
-  --color-primary-dark-light: rgba(68, 39, 173, 0.15);
+  --color-secondary: var(--brand-teal);
+  --color-secondary-light: color-mix(in srgb, var(--brand-teal) 14%, white);
+  --color-secondary-dark-light: color-mix(in srgb, var(--brand-teal) 15%, transparent);
 
-  --color-secondary: #18ad99;
-  --color-secondary-light: #d9f5f0;
-  --color-secondary-dark-light: rgba(24, 173, 153, 0.15);
+  --color-success: var(--brand-teal);
+  --color-success-light: color-mix(in srgb, var(--brand-teal) 16%, white);
+  --color-success-dark-light: color-mix(in srgb, var(--brand-teal) 15%, transparent);
 
-  --color-success: #00ab55;
-  --color-success-light: #ddf5f0;
-  --color-success-dark-light: rgba(0, 171, 85, 0.15);
+  --color-danger: #c53030;
+  --color-danger-light: color-mix(in srgb, #c53030 8%, white);
+  --color-danger-dark-light: color-mix(in srgb, #c53030 12%, transparent);
 
-  --color-danger: #e7515a;
-  --color-danger-light: #fff5f5;
-  --color-danger-dark-light: rgba(231, 81, 90, 0.15);
+  --color-warning: var(--brand-golden);
+  --color-warning-light: color-mix(in srgb, var(--brand-golden) 18%, white);
+  --color-warning-dark-light: color-mix(in srgb, var(--brand-golden) 15%, transparent);
 
-  --color-warning: #e2a03f;
-  --color-warning-light: #fff9ed;
-  --color-warning-dark-light: rgba(226, 160, 63, 0.15);
+  --color-info: var(--brand-deep-purple);
+  --color-info-light: color-mix(in srgb, var(--brand-deep-purple) 12%, white);
+  --color-info-dark-light: color-mix(in srgb, var(--brand-deep-purple) 12%, transparent);
 
-  --color-info: #2196f3;
-  --color-info-light: #e7f7ff;
-  --color-info-dark-light: rgba(33, 150, 243, 0.15);
+  --color-dark: color-mix(in srgb, var(--brand-dark-grey) 55%, black);
+  --color-dark-light: var(--brand-light-grey);
+  --color-dark-dark-light: color-mix(in srgb, var(--brand-dark-grey) 20%, transparent);
 
-  --color-dark: #3b3f5c;
-  --color-dark-light: #eaeaec;
-  --color-dark-dark-light: rgba(59, 63, 92, 0.15);
-
-  --color-black: #0e1726;
-  --color-black-light: #e3e4eb;
-  --color-black-dark-light: rgba(14, 23, 38, 0.15);
+  --color-black: var(--brand-dark-grey);
+  --color-black-light: var(--brand-light-grey);
+  --color-black-dark-light: color-mix(in srgb, var(--brand-dark-grey) 18%, transparent);
 
   --color-white: #ffffff;
-  --color-white-light: #e0e6ed;
-  --color-white-dark: #888ea8;
+  --color-white-light: color-mix(in srgb, var(--brand-light-grey) 92%, black);
+  --color-white-dark: color-mix(in srgb, var(--brand-dark-grey) 55%, white);
 
-  --color-brand-accent: #f4c84b;
-  --color-bg-light: #f2f2f2;
-  --color-text-dark: #4f4f4f;
+  --color-brand-accent: var(--brand-golden);
+  --color-bg-light: var(--brand-light-grey);
+  --color-text-dark: var(--brand-dark-grey);
 
   --spacing-4-5: 18px;
 
-  --shadow-3xl: 0 2px 2px rgb(224 230 237 / 46%), 1px 6px 7px rgb(224 230 237 / 46%);
-  /* Custom Colors for Table */
-  --color-main-border: #e0e6ed;
-  --color-muted-bg: #f3f4f6;
-  --color-muted: #888ea8;
-  --color-body: #4f4f4f;
+  --shadow-3xl: 0 2px 2px rgb(79 79 79 / 8%), 1px 6px 7px rgb(79 79 79 / 10%);
+  --color-main-border: color-mix(in srgb, var(--brand-dark-grey) 16%, var(--brand-light-grey));
+  --color-muted-bg: color-mix(in srgb, var(--brand-light-grey) 88%, black);
+  --color-muted: color-mix(in srgb, var(--brand-dark-grey) 50%, white);
+  --color-body: var(--brand-dark-grey);
 }
 
 @variant dark (&:where(.dark, .dark *));
@@ -337,57 +335,53 @@ pre.hljs {
 }
 
 :root {
-  /* Brand tokens + CSS font stacks (match Google Fonts / Fontshare) */
-  --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
-  --font-body: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
-
-  --brand-primary: #4427ad;
-  --brand-secondary: #18ad99;
-  --brand-accent: #f4c84b;
-  --bg-light: #f2f2f2;
+  --brand-primary: var(--brand-deep-purple);
+  --brand-secondary: var(--brand-teal);
+  --brand-accent: var(--brand-golden);
+  --bg-light: var(--brand-light-grey);
   --white: #ffffff;
-  --text-dark: #4f4f4f;
+  --text-dark: var(--brand-dark-grey);
 
   --background: #ffffff;
-  --foreground: #4f4f4f;
+  --foreground: var(--brand-dark-grey);
   --card: #ffffff;
-  --card-foreground: #4f4f4f;
+  --card-foreground: var(--brand-dark-grey);
   --popover: #ffffff;
-  --popover-foreground: #4f4f4f;
-  --primary: #4427ad;
+  --popover-foreground: var(--brand-dark-grey);
+  --primary: var(--brand-deep-purple);
   --primary-foreground: #ffffff;
-  --secondary: #18ad99;
+  --secondary: var(--brand-teal);
   --secondary-foreground: #ffffff;
-  --muted: #f2f2f2;
-  --muted-foreground: #6b7280;
-  --accent: #f4c84b;
-  --accent-foreground: #4f4f4f;
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: #4427ad;
+  --muted: var(--brand-light-grey);
+  --muted-foreground: color-mix(in srgb, var(--brand-dark-grey) 72%, white);
+  --accent: var(--brand-golden);
+  --accent-foreground: var(--brand-dark-grey);
+  --destructive: #c53030;
+  --border: color-mix(in srgb, var(--brand-dark-grey) 14%, var(--brand-light-grey));
+  --input: color-mix(in srgb, var(--brand-dark-grey) 14%, var(--brand-light-grey));
+  --ring: var(--brand-deep-purple);
   --radius: 0.625rem;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: #7c5ce8;
+  --background: color-mix(in srgb, var(--brand-dark-grey) 82%, black);
+  --foreground: var(--brand-light-grey);
+  --card: color-mix(in srgb, var(--brand-dark-grey) 70%, black);
+  --card-foreground: var(--brand-light-grey);
+  --popover: color-mix(in srgb, var(--brand-dark-grey) 70%, black);
+  --popover-foreground: var(--brand-light-grey);
+  --primary: color-mix(in srgb, var(--brand-deep-purple) 72%, white);
   --primary-foreground: #ffffff;
-  --secondary: #2dd4bf;
-  --secondary-foreground: #0f172a;
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: #f4c84b;
-  --accent-foreground: #1f2937;
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: #7c5ce8;
+  --secondary: color-mix(in srgb, var(--brand-teal) 55%, white);
+  --secondary-foreground: color-mix(in srgb, black 40%, var(--brand-light-grey));
+  --muted: color-mix(in srgb, var(--brand-dark-grey) 50%, black);
+  --muted-foreground: color-mix(in srgb, var(--brand-light-grey) 65%, white);
+  --accent: var(--brand-golden);
+  --accent-foreground: var(--brand-dark-grey);
+  --destructive: #f87171;
+  --border: color-mix(in srgb, var(--brand-light-grey) 18%, transparent);
+  --input: color-mix(in srgb, var(--brand-light-grey) 14%, transparent);
+  --ring: color-mix(in srgb, var(--brand-deep-purple) 65%, white);
 }
 
 @layer base {

@@ -1,116 +1,108 @@
 @theme {
-  /* Primary brand */
-  --color-primary-main: #4427ad;
+  /* Primary brand — Skillsure palette */
+  --color-primary-main: var(--brand-deep-purple);
 
-  /* Light / Fill */
-  --color-light-fill-text-primary: #000000;
+  /* Text on light backgrounds: Dark Grey (brand) */
+  --color-light-fill-text-primary: var(--brand-dark-grey);
+  --color-text-primary-default: var(--brand-dark-grey);
+  --color-text-primary-hover: color-mix(in srgb, var(--brand-dark-grey) 88%, black);
+  --color-text-primary-active: color-mix(in srgb, var(--brand-dark-grey) 75%, black);
+  --color-text-primary-disabled: color-mix(in srgb, var(--brand-dark-grey) 45%, white);
 
-  /* Text primary */
-  --color-text-primary-default: #030712;
-  --color-text-primary-hover: #111827;
-  --color-text-primary-active: #1f2937;
-  --color-text-primary-disabled: #9ca3af;
+  /* Secondary text — neutral derived from brand dark grey */
+  --color-text-secondary-default: color-mix(in srgb, var(--brand-dark-grey) 70%, white);
+  --color-text-secondary-hover: color-mix(in srgb, var(--brand-dark-grey) 55%, white);
+  --color-text-secondary-disabled: color-mix(in srgb, var(--brand-dark-grey) 40%, white);
+  --color-text-secondary-active: var(--brand-teal);
 
-  /* Text secondary */
-  --color-text-secondary-default: #64748b;
-  --color-text-secondary-hover: #475569;
-  --color-text-secondary-disabled: #94a3b8;
-  --color-text-secondary-active: #0ea5a4;
+  /* Icons */
+  --color-icon-primary-default: color-mix(in srgb, var(--brand-dark-grey) 92%, black);
+  --color-icon-primary-hover: var(--brand-dark-grey);
+  --color-icon-primary-active: color-mix(in srgb, var(--brand-dark-grey) 80%, black);
+  --color-icon-primary-disabled: color-mix(in srgb, var(--brand-dark-grey) 50%, white);
 
-  /* Icon primary */
-  --color-icon-primary-default: #4b5563;
-  --color-icon-primary-hover: #374151;
-  --color-icon-primary-active: #1f2937;
-  --color-icon-primary-disabled: #9ca3af;
+  --color-icon-secondary-default: color-mix(in srgb, var(--brand-dark-grey) 65%, white);
+  --color-icon-secondary-hover: var(--brand-dark-grey);
+  --color-icon-secondary-active: color-mix(in srgb, var(--brand-dark-grey) 85%, black);
+  --color-icon-secondary-disabled: color-mix(in srgb, var(--brand-dark-grey) 45%, white);
 
-  /* Icon secondary */
-  --color-icon-secondary-default: #64748b;
-  --color-icon-secondary-hover: #475569;
-  --color-icon-secondary-active: #1e293b;
-  --color-icon-secondary-disabled: #94a3b8;
+  /* Surfaces — Light Grey family */
+  --color-surface-primary: var(--brand-light-grey);
+  --color-surface-hover: color-mix(in srgb, var(--brand-light-grey) 88%, black);
+  --color-surface-active: color-mix(in srgb, var(--brand-light-grey) 78%, black);
+  --color-surface-pressed: color-mix(in srgb, var(--brand-light-grey) 85%, black);
+  --color-surface-focus: color-mix(in srgb, var(--brand-light-grey) 94%, white);
+  --color-surface-disabled: color-mix(in srgb, var(--brand-light-grey) 96%, white);
 
-  /* Surfaces */
-  --color-surface-primary: #f8fafc;
-  --color-surface-hover: #e2e8f0;
-  --color-surface-active: #cbd5e1;
-  --color-surface-pressed: #e2e8f0;
-  --color-surface-focus: #eef2f6;
-  --color-surface-disabled: #f1f5f9;
+  --color-surface-secondary-default: color-mix(in srgb, var(--brand-light-grey) 92%, white);
+  --color-surface-secondary-hover: color-mix(in srgb, var(--brand-light-grey) 82%, black);
+  --color-surface-secondary-active: color-mix(in srgb, var(--brand-light-grey) 72%, black);
+  --color-surface-secondary-pressed: color-mix(in srgb, var(--brand-light-grey) 82%, black);
+  --color-surface-secondary-focused: color-mix(in srgb, var(--brand-light-grey) 95%, white);
+  --color-surface-secondary-disabled: color-mix(in srgb, var(--brand-light-grey) 97%, white);
 
-  /* Surface secondary */
-  --color-surface-secondary-default: #f9fafb;
-  --color-surface-secondary-hover: #e5e7eb;
-  --color-surface-secondary-active: #d1d5db;
-  --color-surface-secondary-pressed: #e5e7eb;
-  --color-surface-secondary-focused: #f2f3f6;
-  --color-surface-secondary-disabled: #f3f4f6;
-
-  /* Surface subtle */
-  --color-surface-subtle-default: #fafafa;
-  --color-surface-subtle-hover: #e5e5e5;
-  --color-surface-subtle-active: #d4d4d4;
-  --color-surface-subtle-pressed: #e5e5e5;
-  --color-surface-subtle-focused: #f4f1f1;
-  --color-surface-subtle-disabled: #f5f5f5;
+  --color-surface-subtle-default: color-mix(in srgb, var(--brand-light-grey) 96%, white);
+  --color-surface-subtle-hover: color-mix(in srgb, var(--brand-light-grey) 80%, black);
+  --color-surface-subtle-active: color-mix(in srgb, var(--brand-light-grey) 70%, black);
+  --color-surface-subtle-pressed: color-mix(in srgb, var(--brand-light-grey) 80%, black);
+  --color-surface-subtle-focused: color-mix(in srgb, var(--brand-light-grey) 94%, white);
+  --color-surface-subtle-disabled: color-mix(in srgb, var(--brand-light-grey) 98%, white);
 
   /* State surfaces */
-  --color-states-outline: #ebebeb;
-  --color-states-fill-1: #f5f6f5;
-  --color-states-fill-2: #fdfdfd;
-  --color-states-divider: #f3f3f3;
+  --color-states-outline: color-mix(in srgb, var(--brand-light-grey) 70%, black);
+  --color-states-fill-1: color-mix(in srgb, var(--brand-light-grey) 94%, white);
+  --color-states-fill-2: #ffffff;
+  --color-states-divider: color-mix(in srgb, var(--brand-light-grey) 75%, black);
 
-  /* Borders primary */
-  --color-border-primary-default: #d1d5db;
-  --color-border-primary-hover: #9ca3af;
-  --color-border-primary-active: #6b7280;
-  --color-border-primary-focused: #9ca3af;
-  --color-border-primary-disabled: #f3f4f6;
+  /* Borders */
+  --color-border-primary-default: color-mix(in srgb, var(--brand-dark-grey) 22%, var(--brand-light-grey));
+  --color-border-primary-hover: color-mix(in srgb, var(--brand-dark-grey) 35%, var(--brand-light-grey));
+  --color-border-primary-active: color-mix(in srgb, var(--brand-dark-grey) 50%, var(--brand-light-grey));
+  --color-border-primary-focused: var(--brand-deep-purple);
+  --color-border-primary-disabled: color-mix(in srgb, var(--brand-light-grey) 90%, white);
 
-  /* Borders secondary */
-  --color-border-secondary-default: #cbd5e1;
-  --color-border-secondary-hover: #94a3b8;
-  --color-border-secondary-active: #64748b;
-  --color-border-secondary-focused: #94a3b8;
-  --color-border-secondary-disabled: #f1f5f9;
+  --color-border-secondary-default: color-mix(in srgb, var(--brand-dark-grey) 18%, var(--brand-light-grey));
+  --color-border-secondary-hover: color-mix(in srgb, var(--brand-dark-grey) 32%, var(--brand-light-grey));
+  --color-border-secondary-active: color-mix(in srgb, var(--brand-dark-grey) 45%, var(--brand-light-grey));
+  --color-border-secondary-focused: var(--brand-teal);
+  --color-border-secondary-disabled: color-mix(in srgb, var(--brand-light-grey) 92%, white);
 
-  /* Other text & primary second */
-  --color-text-primary-alt-default: #030712;
-  --color-primary-second-text: #585c58;
+  --color-text-primary-alt-default: var(--brand-dark-grey);
+  --color-primary-second-text: color-mix(in srgb, var(--brand-dark-grey) 85%, black);
 
-  /* Semantic - warning */
-  --color-warning-surface: #ffedf1;
-  --color-warning-text: #ea0c10;
-  --color-warning-border: #e23134;
-  --color-warning-icon: #e64043;
+  /* Semantic — map to brand where defined (growth / attention) */
+  --color-warning-surface: color-mix(in srgb, var(--brand-golden) 22%, white);
+  --color-warning-text: color-mix(in srgb, var(--brand-golden) 45%, black);
+  --color-warning-border: color-mix(in srgb, var(--brand-golden) 55%, black);
+  --color-warning-icon: color-mix(in srgb, var(--brand-golden) 40%, black);
 
-  /* Semantic - success */
-  --color-success-surface: #dcfce7;
-  --color-success-text: #15803d;
-  --color-success-border: #16a34a;
-  --color-success-icon: #17a24a;
+  --color-success-surface: color-mix(in srgb, var(--brand-teal) 18%, white);
+  --color-success-text: color-mix(in srgb, var(--brand-teal) 35%, black);
+  --color-success-border: var(--brand-teal);
+  --color-success-icon: color-mix(in srgb, var(--brand-teal) 25%, black);
 
-  /* Accent palette */
-  --color-accent-orange-light: #fff7ed;
-  --color-accent-orange-dark: #ea580c;
-  --color-accent-blue-dark: #2563eb;
-  --color-accent-blue-light: #e5ebfa;
-  --color-accent-golden-light: #faf3e3;
-  --color-accent-golden-dark: #d5c191;
-  --color-accent-pink-light: #fff6fa;
-  --color-accent-pink-dark: #dc2777;
-  --color-accent-teal-dark: #1b5d69;
-  --color-accent-teal-light: #f2fdff;
-  --color-accent-royal-blue: #0f0fa9;
-  --color-accent-medium-dark-blue: #5c6cf2;
-  --color-accent-blue-navy: #0e2e6b;
-  --color-accent-deep-blue: #123c8c;
-  --color-accent-yellow-mustard: #eab308;
-  --color-accent-yellow-mustard: #ffffffb2;
+  /* Accent palette — only brand-derived tints */
+  --color-accent-orange-light: color-mix(in srgb, var(--brand-golden) 15%, white);
+  --color-accent-orange-dark: color-mix(in srgb, var(--brand-golden) 50%, black);
+  --color-accent-blue-dark: var(--brand-deep-purple);
+  --color-accent-blue-light: color-mix(in srgb, var(--brand-deep-purple) 12%, white);
+  --color-accent-golden-light: color-mix(in srgb, var(--brand-golden) 20%, white);
+  --color-accent-golden-dark: color-mix(in srgb, var(--brand-golden) 45%, black);
+  --color-accent-pink-light: color-mix(in srgb, var(--brand-deep-purple) 10%, white);
+  --color-accent-pink-dark: color-mix(in srgb, var(--brand-deep-purple) 25%, black);
+  --color-accent-teal-dark: color-mix(in srgb, var(--brand-teal) 40%, black);
+  --color-accent-teal-light: color-mix(in srgb, var(--brand-teal) 14%, white);
+  --color-accent-royal-blue: var(--brand-deep-purple);
+  --color-accent-medium-dark-blue: color-mix(in srgb, var(--brand-deep-purple) 65%, white);
+  --color-accent-blue-navy: color-mix(in srgb, var(--brand-deep-purple) 30%, black);
+  --color-accent-deep-blue: color-mix(in srgb, var(--brand-deep-purple) 20%, black);
+  --color-accent-yellow-mustard: var(--brand-golden);
+  --color-accent-highlight-faint: color-mix(in srgb, white 70%, transparent);
 
   /* Base */
   --color-white: #ffffff;
-  --color-zinc-200: #e4e4e7;
-  --color-slate-800: #1e293b;
-  --color-neutral-950: #0f1724;
+  --color-zinc-200: color-mix(in srgb, var(--brand-light-grey) 85%, black);
+  --color-slate-800: color-mix(in srgb, var(--brand-dark-grey) 40%, black);
+  --color-neutral-950: color-mix(in srgb, var(--brand-dark-grey) 65%, black);
   --color-border-gray-00000014: #00000014;
 }

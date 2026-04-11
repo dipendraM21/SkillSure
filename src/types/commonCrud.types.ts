@@ -8,6 +8,11 @@ export type ModuleMode = 'ADD' | 'EDIT' | 'DELETE'
 /** CRUD action for which the request is being made. */
 export type CrudRequestAction = 'list' | 'create' | 'update' | 'fetch' | 'delete'
 
+/** Optional transport for a module: when set, replaces default `commonAjax`. */
+export type CrudExecuteAjax = <TResponse = unknown>(
+  arg: CommonAjaxProps<JsonObject, TResponse>,
+) => Promise<TResponse>
+
 /**
  * Simple custom URLs per action. Use :id in the string for getOne/update/delete – it gets replaced with the record id.
  * Only set the ones that differ from default (list/create = apiUrl, getOne/update/delete = apiUrl/:id).
@@ -45,6 +50,8 @@ export interface CrudConfigItem {
   customUrls?: CustomCrudUrls
   /** Advanced: function that returns URL (use when customUrls is not enough). */
   getRequestUrl?: (props: GetRequestUrlProps) => string
+  /** Replaces default axios `commonAjax` (e.g. mock + `apiClient` list fetchers). */
+  executeAjax?: CrudExecuteAjax
 }
 
 export type CommonCrudBaseState<TRecord> = {
@@ -77,6 +84,7 @@ export interface CommonCrudConfig<TRecord = JsonObject> {
   customUrls?: CustomCrudUrls
   /** Advanced: function that returns URL (use when customUrls is not enough). */
   getRequestUrl?: (props: GetRequestUrlProps) => string
+  executeAjax?: CrudExecuteAjax
   initialState?: Partial<CommonCrudStateGeneric<TRecord>>
   reducers?: Record<string, CrudActionHandler<TRecord>>
   crudApi?: Partial<CrudApiConfig>
