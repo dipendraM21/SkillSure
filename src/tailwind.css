@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './assets/css/fonts.css';
 @import './assets/css/animate.css';
 @import './assets/css/components/buttons.css';
 @import './assets/css/components/badges.css';
@@ -311,6 +312,7 @@ pre.hljs {
 
 @theme inline {
   --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -389,9 +391,7 @@ pre.hljs {
     @apply border-gray-200 dark:border-white/10 outline-black/10;
   }
   body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-body;
+    @apply bg-background text-foreground font-body;
+    color: #4F4F4F;
   }
 }

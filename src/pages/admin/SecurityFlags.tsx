@@ -243,6 +243,16 @@ function FlagStatCard({
   )
 }
 
+function SecurityFlagTypeIcon({ flagIcon }: { flagIcon: FlagRow['flagIcon'] }) {
+  if (flagIcon === 'tab')
+    return <AppWindow className="size-3.5 shrink-0 text-amber-700" strokeWidth={2.5} aria-hidden />
+  if (flagIcon === 'mic')
+    return <MicOff className="size-3.5 shrink-0 text-primary" strokeWidth={2.5} aria-hidden />
+  if (flagIcon === 'face')
+    return <UserX className="size-3.5 shrink-0 text-red-600" strokeWidth={2.5} aria-hidden />
+  return <Globe className="size-3.5 shrink-0 text-red-600" strokeWidth={2.5} aria-hidden />
+}
+
 function FlagTableRow({ row, borderTop }: { row: FlagRow; borderTop: boolean }) {
   const sev =
     row.severity === 'critical'
@@ -250,16 +260,6 @@ function FlagTableRow({ row, borderTop }: { row: FlagRow; borderTop: boolean }) 
       : row.severity === 'warning'
         ? { pill: 'bg-amber-100/90 text-amber-900 ring-1 ring-amber-200/80', label: 'Warning' }
         : { pill: 'bg-primary/12 text-primary ring-1 ring-primary/15', label: 'Notice' }
-
-  const FlagIcon = () => {
-    if (row.flagIcon === 'tab')
-      return <AppWindow className="size-3.5 shrink-0 text-amber-700" strokeWidth={2.5} aria-hidden />
-    if (row.flagIcon === 'mic')
-      return <MicOff className="size-3.5 shrink-0 text-primary" strokeWidth={2.5} aria-hidden />
-    if (row.flagIcon === 'face')
-      return <UserX className="size-3.5 shrink-0 text-red-600" strokeWidth={2.5} aria-hidden />
-    return <Globe className="size-3.5 shrink-0 text-red-600" strokeWidth={2.5} aria-hidden />
-  }
 
   return (
     <div
@@ -278,7 +278,7 @@ function FlagTableRow({ row, borderTop }: { row: FlagRow; borderTop: boolean }) 
         <p className="text-fs-size-14 font-medium leading-5 text-[#191C1E] font-body">{row.employer}</p>
       </div>
       <div className="flex w-[140px] shrink-0 flex-row items-center gap-2">
-        <FlagIcon />
+        <SecurityFlagTypeIcon flagIcon={row.flagIcon} />
         <span className="text-fs-size-14 font-normal leading-5 text-[#191C1E] font-body">{row.flagLabel}</span>
       </div>
       <div className="flex w-[120px] shrink-0 justify-center">

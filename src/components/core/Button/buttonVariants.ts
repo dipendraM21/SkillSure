@@ -12,7 +12,10 @@ const SIZE_CLASS_MAP: Record<ButtonSize, string> = {
  * classes defined in `button.css`.
  */
 export function getButtonClasses(options: ButtonClassOptions): string {
-  const variantClass = options.outline ? `btn-outline btn-${options.variant}` : `btn-${options.variant}`
+  const variantClass =
+    options.outline && options.variant !== 'glassy'
+      ? `btn-outline btn-${options.variant}`
+      : `btn-${options.variant}`
   const sizeClass = SIZE_CLASS_MAP[options.size]
   const roundedClass = options.rounded ? 'rounded-full' : ''
   const iconOnlyClass = options.iconOnly ? 'w-10 h-10 p-0 flex items-center justify-center' : ''

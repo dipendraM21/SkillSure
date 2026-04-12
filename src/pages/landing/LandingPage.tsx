@@ -1,613 +1,587 @@
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
-import { Link } from 'react-router-dom'
-import './landing.css'
+import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { ChevronRight, Rocket, LayoutGrid, Calendar, Bell, BookOpen, Activity, Copy, Menu, X, ArrowRight, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/core/Button/Button';
+import AnimatedGridBackground from '@/components/AnimatedGridBackground';
+import { ScrollStepsSection, StepData } from '@/components/ScrollStepsSection';
+import { CapabilitiesSection } from '@/components/CapabilitiesSection';
+import { TestimonialsSection } from '@/components/TestimonialsSection';
+import { FAQSection } from '@/components/FAQSection';
+import { FooterSection } from '@/components/FooterSection';
+import skillsureLogo from '@/assets/svg/skillsure-logo-full.svg';
 
-/* ------------------------------------------------------------------ */
-/*  Animation variants                                                 */
-/* ------------------------------------------------------------------ */
+type NavSection = 'home' | 'features' | 'pricing';
 
-const fadeUp = { hidden: { opacity: 0, y: 48 }, visible: { opacity: 1, y: 0 } }
-const fadeRight = { hidden: { opacity: 0, x: -48 }, visible: { opacity: 1, x: 0 } }
-const fadeLeft = { hidden: { opacity: 0, x: 48 }, visible: { opacity: 1, x: 0 } }
-const scaleIn = { hidden: { opacity: 0, scale: 0.88 }, visible: { opacity: 1, scale: 1 } }
-
-const stagger = { visible: { transition: { staggerChildren: 0.1 } } }
-
-/* ------------------------------------------------------------------ */
-/*  Scroll-reveal section wrapper                                      */
-/* ------------------------------------------------------------------ */
-
-function Section({ children, className = '', id }: { children: React.ReactNode; className?: string; id?: string }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+const NavbarNavLink = ({
+  id,
+  label,
+  activeNav,
+  onSelect,
+}: {
+  id: NavSection;
+  label: string;
+  activeNav: NavSection;
+  onSelect: (id: NavSection) => void;
+}) => {
+  const isActive = activeNav === id;
   return (
-    <motion.section
-      ref={ref}
-      id={id}
-      initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
-      variants={stagger}
-      className={className}
+    <a
+      href={`#${id}`}
+      onClick={() => onSelect(id)}
+      className={cn(
+        'font-body px-4 py-2 text-sm font-semibold transition-colors relative inline-flex flex-col items-center',
+        isActive ? 'text-[#4427AD]' : 'text-slate-600 hover:text-[#4427AD]',
+      )}
     >
-      {children}
-    </motion.section>
-  )
-}
+      <span className="relative inline-block pb-0.5">
+        {label}
+        {isActive ? (
+          <span className="pointer-events-none absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-[#4427AD]" aria-hidden />
+        ) : null}
+      </span>
+    </a>
+  );
+};
 
-/* ------------------------------------------------------------------ */
-/*  Small shared UI                                                    */
-/* ------------------------------------------------------------------ */
+const NavbarMobileNavLink = ({
+  id,
+  label,
+  delay,
+  onNavigate,
+}: {
+  id: NavSection;
+  label: string;
+  delay: number;
+  onNavigate: (id: NavSection) => void;
+}) => (
+  <motion.a
+    href={`#${id}`}
+    onClick={() => onNavigate(id)}
+    initial={{ opacity: 0, x: 40 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.35, delay, ease: [0.22, 1, 0.36, 1] }}
+    className="font-heading text-[32px] font-bold tracking-tight text-[#1a1a24]"
+  >
+    {label}
+  </motion.a>
+);
 
-function Badge({ children }: { children: React.ReactNode }) {
+const Navbar = () => {
+  const { scrollY } = useScroll();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeNav, setActiveNav] = useState<NavSection>('home');
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 50);
+  });
+
+  useEffect(() => {
+    const syncFromHash = () => {
+      const raw = window.location.hash.slice(1);
+      if (raw === 'features' || raw === 'pricing' || raw === 'home') {
+        setActiveNav(raw);
+      } else if (!raw) {
+        setActiveNav('home');
+      }
+    };
+    syncFromHash();
+    window.addEventListener('hashchange', syncFromHash);
+    return () => window.removeEventListener('hashchange', syncFromHash);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
+  const handleMobileNav = (id: NavSection) => {
+    setActiveNav(id);
+    setMobileOpen(false);
+  };
+
   return (
-    <span className="gradient-border inline-flex items-center gap-2 rounded-full bg-white/[0.03] px-5 py-1.5 text-[11px] font-semibold tracking-widest text-violet-300 uppercase backdrop-blur-sm">
-      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,.6)]" />
-      {children}
-    </span>
-  )
-}
+    <>
+      {/* ── Top bar ── */}
+      <div className="pointer-events-none fixed left-0 right-0 top-0 z-[10050] flex w-full justify-center px-4 pt-4">
+        <motion.nav
+          initial={false}
+          animate={{
+            width: isScrolled ? "min(780px, 92vw)" : "min(1200px, 96vw)",
+            borderRadius: isScrolled ? "9999px" : "16px",
+            y: isScrolled ? 6 : 0,
+            backgroundColor: isScrolled ? "rgba(255,255,255,0.94)" : "rgba(255,255,255,0.97)",
+            boxShadow: isScrolled
+              ? "0 8px 28px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.85) inset"
+              : "0 2px 8px rgba(0,0,0,0.04)",
+            border: isScrolled ? "1px solid rgba(255,255,255,0.75)" : "1px solid rgba(0,0,0,0.06)",
+          }}
+          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          className="pointer-events-auto relative z-[10050] mx-auto flex items-center justify-between backdrop-blur-xl backdrop-saturate-150"
+          style={{
+            paddingLeft: isScrolled ? "20px" : "32px",
+            paddingRight: isScrolled ? "6px" : "10px",
+            paddingTop: isScrolled ? "6px" : "10px",
+            paddingBottom: isScrolled ? "6px" : "10px",
+          }}
+        >
+          <div className="flex flex-1 items-center justify-start gap-3">
+            <img src={skillsureLogo} alt="SkillSure" className="h-5 w-auto" />
+          </div>
 
-function GlowButton({ children, href, variant = 'primary' }: { children: React.ReactNode; href: string; variant?: 'primary' | 'ghost' }) {
-  const base = 'glow-btn relative z-10 inline-flex items-center justify-center rounded-xl px-8 py-4 text-sm font-semibold tracking-wide transition-all duration-400'
-  const styles =
-    variant === 'primary'
-      ? 'bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-violet-600/20'
-      : 'bg-white/[0.04] text-violet-200 border border-white/10 hover:border-violet-500/40'
-  return <Link to={href} className={`${base} ${styles}`}>{children}</Link>
-}
+          <div className="hidden items-center gap-0.5 md:flex">
+            <NavbarNavLink id="home" label="Home" activeNav={activeNav} onSelect={setActiveNav} />
+            <NavbarNavLink id="features" label="Features" activeNav={activeNav} onSelect={setActiveNav} />
+            <NavbarNavLink id="pricing" label="Pricing" activeNav={activeNav} onSelect={setActiveNav} />
+          </div>
 
-function SectionTitle({ badge, title, subtitle }: { badge: string; title: React.ReactNode; subtitle: string }) {
-  return (
-    <motion.div variants={fadeUp} transition={{ duration: 0.7 }} className="mx-auto max-w-2xl text-center">
-      <Badge>{badge}</Badge>
-      <h2 className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">{title}</h2>
-      <p className="mt-4 text-base leading-relaxed text-slate-400">{subtitle}</p>
-    </motion.div>
-  )
-}
+          <div className="flex flex-1 items-center justify-end gap-3">
+            <div className="hidden md:block">
+              <Button variant="primary" size="sm" title="Book Demo" endIcon={<ChevronRight className="h-3.5 w-3.5" />} />
+            </div>
 
-/* ------------------------------------------------------------------ */
-/*  NAVBAR                                                             */
-/* ------------------------------------------------------------------ */
-
-const NAV = [
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'Features', href: '#features' },
-  { label: 'Reviews', href: '#reviews' },
-  { label: 'FAQ', href: '#faq' },
-]
-
-function Navbar() {
-  return (
-    <motion.header
-      initial={{ y: -32, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, delay: 0.1 }}
-      className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.04] bg-[#08080f]/70 backdrop-blur-xl"
-    >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-white">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-cyan-400 text-[10px] font-black text-white shadow-lg shadow-violet-500/30">S</span>
-          <span className="gradient-text">SkillSure</span>
-        </Link>
-
-        <nav className="hidden items-center gap-8 md:flex">
-          {NAV.map((l) => (
-            <a key={l.label} href={l.href} className="text-[13px] font-medium text-slate-400 transition-colors hover:text-white">
-              {l.label}
-            </a>
-          ))}
-        </nav>
-
-        <GlowButton href="/login">Get Started Free</GlowButton>
+            {/* Hamburger — mobile only */}
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-700 transition hover:bg-slate-100 md:hidden"
+              aria-label="Open menu"
+            >
+              <Menu className="h-5 w-5" strokeWidth={2} />
+            </button>
+          </div>
+        </motion.nav>
       </div>
-    </motion.header>
-  )
-}
 
-/* ------------------------------------------------------------------ */
-/*  HERO                                                               */
-/* ------------------------------------------------------------------ */
+      {/* ── Mobile drawer (slides from right) ── */}
+      <AnimatePresence>
+        {mobileOpen ? (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="mobile-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setMobileOpen(false)}
+              className="fixed inset-0 z-[10060] bg-black/20 backdrop-blur-sm md:hidden"
+            />
 
-function HeroBackground() {
-  return (
-    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {/* Animated gradient blobs */}
-      <div className="blob-animate absolute -top-[30%] -left-[10%] h-[700px] w-[700px] rounded-full bg-violet-600/[0.12] blur-[140px]" />
-      <div className="blob-animate-slow absolute top-[10%] right-[-5%] h-[500px] w-[500px] rounded-full bg-cyan-500/[0.08] blur-[120px]" />
-      <div className="blob-animate absolute bottom-[-20%] left-[30%] h-[600px] w-[600px] rounded-full bg-indigo-500/[0.08] blur-[140px]" />
-      <div className="blob-animate-slow absolute top-[50%] right-[20%] h-[300px] w-[300px] rounded-full bg-emerald-500/[0.06] blur-[100px]" />
-
-      {/* Grid overlay */}
-      <div className="landing-grid absolute inset-0" />
-
-      {/* Radial vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(124,58,237,0.1),transparent)]" />
-    </div>
-  )
-}
-
-function FloatingCards() {
-  return (
-    <div className="relative hidden lg:block">
-      <div className="absolute -inset-12 rounded-3xl bg-gradient-to-br from-violet-600/10 via-transparent to-cyan-500/8 blur-3xl" />
-
-      {/* Card 1 – Candidates */}
-      <motion.div
-        initial={{ opacity: 0, y: 40, rotate: 2 }}
-        animate={{ opacity: 1, y: 0, rotate: 2 }}
-        transition={{ delay: 0.5, duration: 0.8 }}
-        className="glass-card relative w-60 rounded-2xl p-5"
-      >
-        <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}>
-          <p className="text-[10px] font-bold tracking-widest text-violet-400 uppercase">Candidates this month</p>
-          <p className="mt-1 text-4xl font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)' }}>412</p>
-          <p className="mt-1 text-xs text-emerald-400">&uarr; 24% vs last month</p>
-        </motion.div>
-      </motion.div>
-
-      {/* Card 2 – Score bars */}
-      <motion.div
-        initial={{ opacity: 0, y: 60 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7, duration: 0.8 }}
-        className="glass-card relative -mt-4 ml-16 w-72 rounded-2xl p-5"
-      >
-        <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}>
-          <p className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Assessment Results</p>
-          <div className="mt-3 space-y-2.5">
-            {[
-              { label: 'Financial Acctg', pct: 82, color: 'from-violet-500 to-indigo-500' },
-              { label: 'Tax Compliance', pct: 71, color: 'from-cyan-400 to-emerald-400' },
-              { label: 'Payroll & Ops', pct: 90, color: 'from-emerald-400 to-cyan-400' },
-              { label: 'Ind. Accounting', pct: 65, color: 'from-indigo-500 to-violet-500' },
-            ].map((r) => (
-              <div key={r.label} className="flex items-center gap-3 text-xs">
-                <span className="w-28 text-slate-400">{r.label}</span>
-                <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${r.pct}%` }}
-                    transition={{ duration: 1.4, delay: 1.0, ease: 'easeOut' }}
-                    className={`h-full rounded-full bg-gradient-to-r ${r.color}`}
-                  />
-                </div>
-                <span className="w-7 text-right font-semibold text-white">{r.pct}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-3 flex gap-2">
-            {['Manufacturing', 'Tally ERP'].map((t) => (
-              <span key={t} className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2 py-0.5 text-[10px] font-medium text-slate-500">{t}</span>
-            ))}
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Card 3 – Skill band */}
-      <motion.div
-        initial={{ opacity: 0, y: 50, rotate: -1 }}
-        animate={{ opacity: 1, y: 0, rotate: -1 }}
-        transition={{ delay: 0.9, duration: 0.8 }}
-        className="glass-card relative -mt-2 ml-4 w-52 rounded-2xl p-4"
-      >
-        <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}>
-          <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-            </span>
-            <span className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Skill Band</span>
-          </div>
-          <p className="mt-1 text-lg font-bold text-white" style={{ fontFamily: 'var(--font-heading)' }}>Advanced</p>
-          <p className="text-xs text-slate-500">Top 15% nationally</p>
-        </motion.div>
-      </motion.div>
-    </div>
-  )
-}
-
-function Hero() {
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 120])
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
-
-  return (
-    <section ref={ref} className="relative min-h-screen overflow-hidden pt-28 pb-24 lg:pt-40 lg:pb-32">
-      <HeroBackground />
-
-      <motion.div style={{ y: heroY, opacity: heroOpacity }} className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
-        {/* Left */}
-        <motion.div initial="hidden" animate="visible" variants={fadeRight} transition={{ duration: 0.8 }}>
-          <Badge>India&apos;s #1 Accountant Assessment Platform</Badge>
-
-          <h1 className="mt-7 text-[2.75rem] font-extrabold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
-            <span className="text-white">Hire accountants</span>
-            <br />
-            <span className="text-white">you can truly </span>
-            <span className="gradient-text-hero">trust.</span>
-          </h1>
-
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-400">
-            SkillSure delivers verified, industry-profiled skill assessments for accountants at Indian SMEs. Free for candidates. Powerful for employers.
-          </p>
-
-          <div className="mt-9 flex flex-wrap gap-4">
-            <GlowButton href="/login">Take Free Assessment</GlowButton>
-            <GlowButton href="#how-it-works" variant="ghost">View Sample Report &rarr;</GlowButton>
-          </div>
-
-          {/* Social proof */}
-          <div className="mt-12 flex items-center gap-3">
-            <div className="flex -space-x-2.5">
-              {['PM', 'RS', 'AJ', 'KR', 'HD'].map((init, i) => (
-                <span
-                  key={init}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#0a0a12] text-[10px] font-bold text-white shadow-lg"
-                  style={{
-                    background: ['linear-gradient(135deg,#7c3aed,#6366f1)', 'linear-gradient(135deg,#06b6d4,#10b981)', 'linear-gradient(135deg,#f4c84b,#f59e0b)', 'linear-gradient(135deg,#ef4444,#f97316)', 'linear-gradient(135deg,#3b82f6,#8b5cf6)'][i],
-                    zIndex: 5 - i,
-                  }}
+            {/* Drawer panel */}
+            <motion.div
+              key="mobile-drawer"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="fixed inset-y-0 right-0 z-[10070] flex w-[85vw] max-w-[380px] flex-col bg-white shadow-2xl md:hidden"
+            >
+              {/* Drawer header */}
+              <div className="flex items-center justify-between px-6 pt-6 pb-2">
+                <img src={skillsureLogo} alt="SkillSure" className="h-5 w-auto" />
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-600 transition hover:bg-slate-100"
+                  aria-label="Close menu"
                 >
-                  {init}
-                </span>
-              ))}
-            </div>
-            <div className="text-xs text-slate-500">
-              <span className="text-amber-400">&#9733;&#9733;&#9733;&#9733;&#9733;</span>{' '}
-              Trusted by <span className="font-semibold text-white">840+ SMEs</span> across India
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Right – floating glass cards */}
-        <FloatingCards />
-      </motion.div>
-
-      {/* Bottom fade */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#08080f] to-transparent" />
-    </section>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  TRUST BAR                                                          */
-/* ------------------------------------------------------------------ */
-
-function TrustBar() {
-  const logos = ['Tata Steel', 'Reliance', 'Infosys', 'Wipro', 'HCL', 'HDFC']
-  return (
-    <Section className="border-y border-white/[0.04] py-12">
-      <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="mx-auto max-w-5xl px-6 text-center">
-        <p className="text-[11px] font-semibold tracking-[0.2em] text-slate-600 uppercase">Trusted by industry leaders</p>
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-x-14 gap-y-4">
-          {logos.map((l) => (
-            <span key={l} className="text-lg font-bold text-slate-700/60 transition-colors duration-300 hover:text-slate-400">{l}</span>
-          ))}
-        </div>
-      </motion.div>
-    </Section>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  HOW IT WORKS                                                       */
-/* ------------------------------------------------------------------ */
-
-const STEPS = [
-  { num: '01', title: 'Register with OTP', desc: 'Sign up instantly with phone or email. Verify with a one-time password and receive your unique SkillSure ID.', icon: 'M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z' },
-  { num: '02', title: 'Complete Your Profile', desc: 'Tell us about your experience, qualifications, and industry. We tailor the assessment to your financial profile.', icon: 'M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z' },
-  { num: '03', title: 'Take the Assessment', desc: '40 questions in 75 minutes — MCQ, situational judgment, chain scenarios, and data interpretation.', icon: 'M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z' },
-  { num: '04', title: 'Get Instant Results', desc: 'View your score, skill band, and dimension breakdown immediately. Employers see verified results.', icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z' },
-]
-
-function HowItWorks() {
-  return (
-    <Section className="relative py-28" id="how-it-works">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,rgba(124,58,237,0.06),transparent)]" />
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionTitle badge="Simple 4-step process" title={<>How <span className="gradient-text">SkillSure</span> Works</>} subtitle="From registration to verified results in under 90 minutes." />
-
-        <div className="relative mt-20 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Connecting line */}
-          <div className="pointer-events-none absolute top-12 left-[calc(12.5%+1rem)] hidden h-px w-[calc(75%-2rem)] bg-gradient-to-r from-violet-500/30 via-cyan-500/30 to-emerald-500/30 lg:block" />
-
-          {STEPS.map((s, i) => (
-            <motion.div
-              key={s.num}
-              variants={fadeUp}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="glass-card group relative overflow-hidden rounded-2xl p-7"
-            >
-              <span className="absolute -top-px left-6 rounded-b-lg bg-gradient-to-r from-violet-600 to-indigo-600 px-3 py-1 text-[10px] font-bold tracking-wider text-white shadow-lg shadow-violet-600/20">{s.num}</span>
-              <div className="mt-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/10 to-cyan-500/10 text-violet-400 transition-colors group-hover:from-violet-500/20 group-hover:to-cyan-500/20 group-hover:text-white">
-                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d={s.icon} /></svg>
-              </div>
-              <h3 className="mt-5 text-base font-bold text-white">{s.title}</h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{s.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </Section>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  FEATURES                                                           */
-/* ------------------------------------------------------------------ */
-
-const FEATURES = [
-  { title: 'Industry-Profiled Questions', desc: 'Assessments mapped to 6 financial profiles — Manufacturing, Trading, Services, and more — so scores reflect real-world relevance.', gradient: 'from-violet-500 to-indigo-500' },
-  { title: '9 Competency Dimensions', desc: 'Financial Accounting to GST Compliance, Payroll, Costing — each dimension scored independently with clear band labels.', gradient: 'from-cyan-400 to-emerald-400' },
-  { title: 'Instant Verified Results', desc: 'Candidates see scores immediately. Employers get a verified dashboard with integrity flags and percentile rankings.', gradient: 'from-amber-400 to-orange-500' },
-  { title: 'Locked-Browser Integrity', desc: 'Fullscreen lockdown, tab-switch detection, and violation logging ensure assessment integrity without being intrusive.', gradient: 'from-indigo-500 to-violet-500' },
-  { title: 'Free for Candidates', desc: 'Candidates take the assessment at no cost and receive a SkillSure ID — a portable credential for their accounting career.', gradient: 'from-emerald-400 to-cyan-400' },
-  { title: 'Employer Analytics', desc: 'Filter candidates, compare cohort performance, export CSV reports, and identify weakest competency areas across your hires.', gradient: 'from-rose-400 to-violet-500' },
-]
-
-function Features() {
-  return (
-    <Section className="relative py-28" id="features">
-      <div className="pointer-events-none absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-cyan-500/[0.04] blur-[140px]" />
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionTitle badge="Platform Features" title={<>Everything you need to <span className="gradient-text">hire with confidence</span></>} subtitle="Comprehensive assessment infrastructure built for Indian accounting teams." />
-
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((f, i) => (
-            <motion.div
-              key={f.title}
-              variants={scaleIn}
-              transition={{ delay: i * 0.07, duration: 0.5 }}
-              className="glass-card group relative overflow-hidden rounded-2xl p-7"
-            >
-              <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${f.gradient} shadow-lg`} style={{ boxShadow: `0 8px 24px rgba(124,58,237,0.15)` }}>
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" /></svg>
-              </div>
-              <h3 className="mt-5 text-base font-bold text-white">{f.title}</h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{f.desc}</p>
-
-              {/* Corner glow on hover */}
-              <div className="pointer-events-none absolute -bottom-12 -right-12 h-24 w-24 rounded-full bg-violet-500/0 transition-all duration-500 group-hover:bg-violet-500/10 group-hover:blur-2xl" />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </Section>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  PRODUCT PREVIEW / VALUE                                            */
-/* ------------------------------------------------------------------ */
-
-function ProductPreview() {
-  return (
-    <Section className="relative overflow-hidden py-28">
-      <div className="pointer-events-none absolute -left-40 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-violet-600/[0.06] blur-[140px]" />
-
-      <div className="mx-auto grid max-w-6xl items-center gap-16 px-6 lg:grid-cols-2">
-        <motion.div variants={fadeRight} transition={{ duration: 0.7 }}>
-          <Badge>For Employers</Badge>
-          <h2 className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Stop guessing.<br /><span className="gradient-text">Start measuring.</span>
-          </h2>
-          <p className="mt-5 text-base leading-relaxed text-slate-400">
-            Traditional interviews miss 60% of competency gaps. SkillSure gives you objective, dimension-level data — so you can hire the right accountant the first time.
-          </p>
-          <ul className="mt-7 space-y-3.5">
-            {[
-              'Filter candidates by score, band, or competency',
-              'See integrity flags for every assessment',
-              'Export results as CSV for your hiring pipeline',
-              'Cohort analytics when 5+ candidates are assessed',
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-3 text-sm text-slate-400">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
-                  <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-9">
-            <GlowButton href="/login">Try Employer Dashboard</GlowButton>
-          </div>
-        </motion.div>
-
-        {/* Mock dashboard */}
-        <motion.div variants={fadeLeft} transition={{ duration: 0.8 }} className="relative">
-          <div className="absolute -inset-8 rounded-3xl bg-gradient-to-br from-violet-600/8 via-transparent to-cyan-500/6 blur-2xl" />
-          <div className="gradient-border glass-card relative overflow-hidden rounded-2xl p-7">
-            <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
-              <h3 className="text-sm font-bold text-white">Employer Dashboard</h3>
-              <span className="rounded-full bg-emerald-500/10 px-3 py-0.5 text-[10px] font-semibold text-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.2)]">Live</span>
-            </div>
-            <div className="mt-5 grid grid-cols-3 gap-3">
-              {[
-                { label: 'Total Assessed', value: '127', trend: '+18%' },
-                { label: 'Avg. Score', value: '74', trend: '+3 pts' },
-                { label: 'Advanced Band', value: '42%', trend: '+7%' },
-              ].map((s) => (
-                <div key={s.label} className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-3 text-center">
-                  <p className="text-2xl font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)' }}>{s.value}</p>
-                  <p className="text-[10px] text-slate-600">{s.label}</p>
-                  <p className="text-[10px] font-semibold text-emerald-400">{s.trend}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 space-y-2">
-              {[
-                { name: 'Priya Sharma', score: '88', band: 'Advanced' },
-                { name: 'Ravi Patel', score: '72', band: 'Intermediate' },
-                { name: 'Ananya Joshi', score: '91', band: 'Expert' },
-              ].map((row) => (
-                <div key={row.name} className="flex items-center justify-between rounded-lg border border-white/[0.03] bg-white/[0.02] px-4 py-2.5 text-xs">
-                  <span className="text-slate-300">{row.name}</span>
-                  <span className="font-semibold text-white">{row.score}</span>
-                  <span className="rounded-full bg-violet-500/10 px-2.5 py-0.5 text-violet-400">{row.band}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </Section>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  TESTIMONIALS                                                       */
-/* ------------------------------------------------------------------ */
-
-const TESTIMONIALS = [
-  { name: 'Rajesh Kumar', role: 'CFO, ManufactureTech Pvt Ltd', text: 'SkillSure completely changed how we hire accountants. The dimension-level breakdown showed us exactly where candidates excelled and where they didn\'t.' },
-  { name: 'Priya Menon', role: 'HR Head, ServicePro India', text: 'We reduced our bad hires by 40% in 3 months. The integrity flags give us confidence that the scores are genuine.' },
-  { name: 'Amit Patel', role: 'Founder, TradeEasy Solutions', text: 'As a growing SME, we can\'t afford hiring mistakes. SkillSure\'s free-for-candidate model let us assess everyone without budget constraints.' },
-]
-
-function Testimonials() {
-  return (
-    <Section className="relative py-28" id="reviews">
-      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-indigo-500/[0.05] blur-[140px]" />
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionTitle badge="What People Say" title={<>Trusted by hiring teams <span className="gradient-text">across India</span></>} subtitle="Real feedback from employers using SkillSure to find accountants they trust." />
-
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
-          {TESTIMONIALS.map((t, i) => (
-            <motion.div
-              key={t.name}
-              variants={fadeUp}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="glass-card group relative overflow-hidden rounded-2xl p-7"
-            >
-              <div className="flex gap-0.5 text-amber-400">{'★★★★★'.split('').map((s, j) => <span key={j}>{s}</span>)}</div>
-              <p className="mt-5 text-sm leading-relaxed text-slate-300 italic">&ldquo;{t.text}&rdquo;</p>
-              <div className="mt-6 flex items-center gap-3 border-t border-white/[0.04] pt-5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 text-xs font-bold text-white shadow-lg">{t.name.split(' ').map((n) => n[0]).join('')}</span>
-                <div>
-                  <p className="text-sm font-semibold text-white">{t.name}</p>
-                  <p className="text-xs text-slate-500">{t.role}</p>
-                </div>
+                  <X className="h-5 w-5" strokeWidth={2} />
+                </button>
               </div>
 
-              <div className="pointer-events-none absolute -top-12 -right-12 h-24 w-24 rounded-full bg-violet-500/0 transition-all duration-500 group-hover:bg-violet-500/8 group-hover:blur-2xl" />
+              {/* Nav label */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="mt-8 px-6 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#4427AD]"
+              >
+                Navigation
+              </motion.p>
+
+              {/* Links */}
+              <div className="mt-6 flex flex-col gap-5 px-6">
+                <NavbarMobileNavLink id="home" label="Home" delay={0.08} onNavigate={handleMobileNav} />
+                <NavbarMobileNavLink id="features" label="Features" delay={0.14} onNavigate={handleMobileNav} />
+                <NavbarMobileNavLink id="pricing" label="Pricing" delay={0.2} onNavigate={handleMobileNav} />
+              </div>
+
+              {/* Divider */}
+              <div className="mx-6 mt-8 border-t border-gray-100" />
+
+              {/* Promo card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.28, duration: 0.4 }}
+                className="mx-6 mt-6 rounded-2xl border border-purple-100 bg-gradient-to-br from-[#FAF8FF] to-[#EDE8FF] p-5"
+              >
+                <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#4427AD]">
+                  <Sparkles className="h-4 w-4" />
+                  New Scale Plans
+                </div>
+                <p className="text-[13.5px] leading-relaxed text-gray-500">
+                  Our Pro &amp; Enterprise plans are now 20% off for annual bookings.
+                </p>
+                <a href="#pricing" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#4427AD]">
+                  View Pricing <ChevronRight className="h-3.5 w-3.5" />
+                </a>
+              </motion.div>
+
+              {/* Bottom CTA */}
+              <div className="mt-auto flex flex-col gap-3 px-6 pb-8 pt-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35, duration: 0.35 }}
+                >
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    title="Request Demo"
+                    endIcon={<ArrowRight className="h-4 w-4" />}
+                    className="w-full"
+                  />
+                </motion.div>
+                <motion.a
+                  href="#"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.42 }}
+                  className="text-center text-sm font-medium text-[#4427AD]"
+                >
+                  Sign in to Academy
+                </motion.a>
+              </div>
             </motion.div>
-          ))}
-        </div>
-      </div>
-    </Section>
-  )
-}
+          </>
+        ) : null}
+      </AnimatePresence>
+    </>
+  );
+};
 
-/* ------------------------------------------------------------------ */
-/*  FAQ                                                                */
-/* ------------------------------------------------------------------ */
 
-const FAQS = [
-  { q: 'Is SkillSure really free for candidates?', a: 'Yes — candidates take the assessment at no cost and receive a SkillSure ID and full score breakdown.' },
-  { q: 'How long does the assessment take?', a: '75 minutes for 40 questions. The test covers 9 competency dimensions relevant to Indian accounting roles.' },
-  { q: 'What question types are included?', a: 'MCQ, situational judgment, chain scenarios, and data interpretation — all mapped to real-world accounting tasks.' },
-  { q: 'How do employers access results?', a: 'Employers get a secure dashboard showing scores, integrity flags, and analytics for consenting candidates.' },
-]
 
-function FAQ() {
-  return (
-    <Section className="relative py-28" id="faq">
-      <div className="mx-auto max-w-3xl px-6">
-        <SectionTitle badge="FAQ" title="Frequently asked questions" subtitle="Everything you need to know about SkillSure." />
-
-        <div className="mt-14 space-y-4">
-          {FAQS.map((f, i) => (
-            <motion.details
-              key={i}
-              variants={fadeUp}
-              transition={{ delay: i * 0.07 }}
-              className="glass-card group rounded-2xl px-7 py-5 transition-all open:bg-white/[0.04]"
-            >
-              <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-white">
-                {f.q}
-                <span className="ml-4 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/10 text-xs text-violet-400 transition-all group-open:rotate-45 group-open:border-violet-500/30 group-open:bg-violet-500/10">+</span>
-              </summary>
-              <p className="mt-4 text-sm leading-relaxed text-slate-400">{f.a}</p>
-            </motion.details>
-          ))}
-        </div>
-      </div>
-    </Section>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  CTA BANNER                                                         */
-/* ------------------------------------------------------------------ */
-
-function CtaBanner() {
-  return (
-    <Section className="py-24">
-      <div className="mx-auto max-w-5xl px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-white/[0.06] bg-gradient-to-br from-violet-600/20 via-indigo-600/10 to-cyan-500/10 px-8 py-20 text-center backdrop-blur-xl sm:px-16">
-          {/* Glow blobs */}
-          <div className="pointer-events-none absolute -top-20 left-1/4 h-40 w-40 rounded-full bg-violet-500/20 blur-[80px]" />
-          <div className="pointer-events-none absolute -bottom-20 right-1/4 h-40 w-40 rounded-full bg-cyan-500/15 blur-[80px]" />
-
-          <motion.h2 variants={fadeUp} transition={{ duration: 0.7 }} className="relative text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Start your hiring{' '}<span className="gradient-text">journey today</span>
-          </motion.h2>
-          <motion.p variants={fadeUp} transition={{ delay: 0.1 }} className="relative mt-5 mx-auto max-w-lg text-base leading-relaxed text-slate-400">
-            Join 840+ Indian SMEs using SkillSure to find accountants they can trust. It takes less than 2 minutes to get started.
-          </motion.p>
-          <motion.div variants={fadeUp} transition={{ delay: 0.2 }} className="relative mt-9 flex flex-wrap justify-center gap-4">
-            <GlowButton href="/login">Get Started Free</GlowButton>
-            <GlowButton href="#how-it-works" variant="ghost">Learn More</GlowButton>
-          </motion.div>
-        </div>
-      </div>
-    </Section>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  FOOTER                                                             */
-/* ------------------------------------------------------------------ */
-
-function Footer() {
-  return (
-    <footer className="border-t border-white/[0.04] py-14">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 sm:flex-row">
-        <Link to="/" className="flex items-center gap-2 text-lg font-bold text-white">
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-violet-500 to-cyan-400 text-[9px] font-black text-white">S</span>
-          <span className="gradient-text">SkillSure</span>
-        </Link>
-        <p className="text-xs text-slate-600">&copy; {new Date().getFullYear()} SkillSure. All rights reserved.</p>
-        <div className="flex gap-7 text-xs text-slate-600">
-          {['Privacy', 'Terms', 'Contact'].map((l) => (
-            <a key={l} href="#" className="transition-colors hover:text-violet-400">{l}</a>
-          ))}
-        </div>
-      </div>
-    </footer>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  PAGE                                                               */
-/* ------------------------------------------------------------------ */
-
-export default function LandingPage() {
-  return (
-    <div className="landing-dark noise-overlay min-h-screen bg-[#08080f] font-body text-slate-300" style={{ scrollBehavior: 'smooth' }}>
-      <Navbar />
-      <Hero />
-      <TrustBar />
-      <HowItWorks />
-      <Features />
-      <ProductPreview />
-      <Testimonials />
-      <FAQ />
-      <CtaBanner />
-      <Footer />
+const FloatingBadge = () => (
+    <div className="inline-flex items-center px-1.5 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-[#DDD6FE] shadow-sm mb-8 relative z-10">
+        <span className="bg-[#4427AD] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
+        <span className="text-[#4427AD] text-xs font-semibold px-4 tracking-wide uppercase">AI Course Generation</span>
     </div>
-  )
-}
+);
+
+const HeroTitle = () => {
+    const words = ["manage", "scale", "build"];
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % words.length);
+        }, 2500);
+        return () => clearInterval(interval);
+    }, [words.length]);
+
+    return (
+        <h1 className="text-[38px] sm:text-5xl md:text-[70px] font-medium text-[#1a1a24] tracking-[-0.02em] leading-[1.08] mb-8">
+            Everything you need
+            <br />
+            to <span className="relative inline-block overflow-hidden [vertical-align:bottom]">
+                <AnimatePresence mode="popLayout">
+                    <motion.span
+                        key={words[index]}
+                        initial={{ opacity: 0, y: 30, filter: "blur(4px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: -30, filter: "blur(4px)" }}
+                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                        className="inline-block text-[#4427AD]"
+                    >
+                        {words[index]}
+                    </motion.span>
+                </AnimatePresence>
+            </span> your ed-tech
+        </h1>
+    );
+};
+
+const DashboardMockup = () => (
+    <div className="relative mx-auto mt-12 sm:mt-20 max-w-6xl z-10">
+      <div className="rounded-2xl sm:rounded-[40px] overflow-hidden bg-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 flex p-3 sm:p-6">
+         {/* Sidebar Mock */}
+         <div className="w-[240px] pl-4 pr-6 pt-6 pb-12 flex-col items-start border-r border-gray-100 hidden lg:flex">
+             <div className="flex items-center mb-10 w-full">
+                 <img src={skillsureLogo} alt="SkillSure Logo" className="h-[28px] w-auto" />
+             </div>
+             
+             <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4 w-full">All Category</div>
+             
+             <div className="flex flex-col space-y-2 w-full">
+                 {[
+                     { icon: LayoutGrid, text: 'Dashboard', active: true },
+                     { icon: BookOpen, text: 'Courses' },
+                     { icon: Copy, text: 'Profile' },
+                     { icon: Bell, text: 'Announcements' },
+                     { icon: Activity, text: 'Assignments' },
+                     { icon: Activity, text: 'Quiz' },
+                     { icon: Activity, text: 'Discussions' },
+                 ].map((item, i) => (
+                     <div key={i} className={`flex items-center px-3 py-2.5 rounded-xl cursor-pointer transition ${item.active ? 'bg-gray-100 text-gray-900 font-semibold' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}>
+                         <item.icon className={`w-5 h-5 mr-3 ${item.active ? 'text-gray-800' : 'text-gray-400'}`} strokeWidth={2}/>
+                         <span className="text-sm">{item.text}</span>
+                     </div>
+                 ))}
+             </div>
+             
+             <div className="mt-auto pt-8 flex flex-col space-y-2 w-full">
+                <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Help & Support</div>
+                <div className="flex items-center px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 cursor-pointer">
+                    <Activity className="w-5 h-5 mr-3 text-gray-400"/>
+                    <span className="text-sm">Help Center</span>
+                </div>
+                <div className="flex items-center px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 cursor-pointer">
+                    <Activity className="w-5 h-5 mr-3 text-gray-400"/>
+                    <span className="text-sm">Settings</span>
+                </div>
+             </div>
+         </div>
+         
+         {/* Main Content Area */}
+         <div className="flex-1 lg:pl-10 lg:pr-4 pt-6">
+            <div className="flex items-center justify-between mb-8 w-full">
+                <h1 className="text-base sm:text-2xl font-semibold text-gray-900 truncate">Hi Jatin, <span className="font-normal text-gray-500 hidden sm:inline">Good Morning 👋</span></h1>
+                <div className="flex items-center space-x-4">
+                    <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center relative cursor-pointer">
+                        <Bell className="w-5 h-5 text-gray-600" />
+                        <div className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div className="relative hidden md:block">
+                        <Activity className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <input type="text" placeholder="Search here..." className="pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm w-[280px] focus:outline-none focus:ring-2 focus:ring-purple-100" />
+                    </div>
+                </div>
+            </div>
+            
+            {/* Purple Banner */}
+            <div className="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl sm:rounded-3xl p-5 sm:p-10 text-white relative overflow-hidden shadow-lg shadow-purple-500/20">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                <div className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium mb-6">Explore Learning</div>
+                <h2 className="text-2xl sm:text-4xl font-bold mb-4 leading-tight max-w-md">Diverse Courses for<br/>Your Growth</h2>
+                <p className="text-purple-100 mb-8 max-w-lg text-sm leading-relaxed">Master new skills with expert-led courses. Learn at your own pace with hands-on projects and real-world applications.</p>
+                <div className="flex items-center space-x-4 relative z-10">
+                    <button className="bg-[#1a1a24] text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg hover:bg-black transition">Explore Courses</button>
+                    <button className="bg-transparent border border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-xl text-sm font-semibold transition backdrop-blur-sm">How it works</button>
+                </div>
+            </div>
+            
+            {/* Search filters mock */}
+            <div className="flex items-center justify-between mt-8">
+                <div className="bg-gray-50 px-4 py-3 rounded-xl text-gray-400 text-sm flex items-center w-full max-w-md border border-gray-100">
+                    <Activity className="w-4 h-4 mr-2"/>
+                    Search courses by title, instructor, or category...
+                </div>
+               <div className="flex items-center space-x-3 hidden sm:flex">
+                    <button className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 bg-white shadow-sm flex items-center">
+                        Most Popular <Activity className="w-4 h-4 ml-2"/>
+                    </button>
+                    <button className="p-2 bg-gray-500 text-white rounded-lg shadow-sm">
+                       <Activity className="w-5 h-5"/>
+                    </button>
+               </div>
+            </div>
+            
+            {/* Analytics Overview Title */}
+            <div className="flex items-center justify-between mt-10 mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Analytics Overview</h3>
+                <div className="flex items-center text-sm text-gray-500 px-3 py-1.5 border border-gray-200 rounded-md">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Jun - 09 - 2023 <Activity className="w-3 h-3 ml-2"/>
+                </div>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 w-full opacity-60">
+                {[1,2,3,4].map((i) => (
+                    <div key={i} className="bg-white border flex items-center border-gray-100 rounded-2xl p-4 shadow-sm">
+                        <div className="w-10 h-10 bg-purple-50 rounded-lg mr-3"></div>
+                        <div className="space-y-2 flex-1">
+                            <div className="h-2 w-1/2 bg-gray-100 rounded"></div>
+                            <div className="h-3 w-3/4 bg-gray-200 rounded"></div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+         </div>
+      </div>
+      
+      {/* Decorative gradient blur under dashboard */}
+      <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-4/5 h-20 bg-[#4427AD]/10 blur-[100px] z-0"></div>
+    </div>
+);
+
+const mockSteps: StepData[] = [
+  {
+    id: "01",
+    title: "Schedule a Demo",
+    description: "Start by booking a personalized demo. We walk you through the platform, understand your business model, and discuss how you plan to deliver learning.",
+    image: (
+      <div className="w-full h-full bg-[#f8f9fc] flex flex-col justify-center items-center relative p-6">
+        <div className="absolute top-4 left-4 flex space-x-1.5 opacity-60">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+        </div>
+        <div className="flex gap-3 w-full h-[65%] mt-6 relative z-10">
+           {/* video mockup */}
+           <div className="w-7/12 bg-slate-300 rounded-2xl overflow-hidden shadow-sm relative border border-slate-200/50">
+               <div className="absolute inset-0 bg-slate-700/10"></div>
+           </div>
+           <div className="w-5/12 flex flex-col gap-3">
+               <div className="h-1/2 bg-slate-200 rounded-2xl overflow-hidden shadow-sm relative border border-slate-200/50"><div className="absolute inset-0 bg-slate-700/5"></div></div>
+               <div className="h-1/2 bg-slate-200 rounded-2xl overflow-hidden shadow-sm relative border border-slate-200/50"><div className="absolute inset-0 bg-slate-700/5"></div></div>
+           </div>
+        </div>
+        {/* Floating Call Controls */}
+        <div className="flex items-center space-x-2 mt-auto mb-2 bg-white backdrop-blur-md px-5 py-2.5 rounded-full shadow-xl shadow-black/5 border border-slate-100 z-20">
+           <div className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-50 transition cursor-pointer text-slate-500">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+           </div>
+           <div className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-50 transition cursor-pointer text-slate-500">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 10-4 4 6 6 4-16-28-8z"></path></svg>
+           </div>
+           <div className="w-10 h-10 ml-2 rounded-full bg-red-500 flex items-center justify-center shadow-lg shadow-red-500/30 cursor-pointer text-white">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"></path><line x1="22" y1="2" x2="2" y2="22"></line></svg>
+           </div>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: "02",
+    title: "Get a custom plan",
+    description: "Based on your requirements—courses, cohorts, monetization, branding, and scale—we design a custom plan tailored to your usage and growth.",
+    image: (
+      <div className="w-full h-full bg-white flex flex-col pt-8 relative border-t-8 border-gray-50">
+         <div className="absolute top-[-2px] left-4 flex space-x-1.5 opacity-50">
+           <div className="w-2 h-2 rounded-full bg-red-400"></div>
+           <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+           <div className="w-2 h-2 rounded-full bg-green-400"></div>
+         </div>
+         <div className="text-center mt-6">
+           <h3 className="text-2xl font-bold text-gray-900 tracking-tight leading-snug">Plans designed to match<br/>your <span className="text-[#4427AD]">learning goals.</span></h3>
+           <div className="flex justify-center mt-6">
+              <div className="bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-medium z-10 mr-[-10px] shadow-sm">Monthly Billing</div>
+              <div className="bg-white border border-gray-200 text-slate-700 px-4 py-1.5 pl-6 flex items-center rounded-r-full text-[10px] font-medium z-0">Annual Billing <span className="ml-2 bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-[8px] font-bold tracking-wide">Save 20%</span></div>
+           </div>
+         </div>
+         <div className="mt-8 flex w-full space-x-4 px-8 opacity-90 pb-8 flex-1 items-end">
+            <div className="flex-1 bg-[#4427AD] rounded-2xl p-5 text-white shadow-xl shadow-[#4427AD]/20 translate-y-4 relative z-10 border border-[#6B4FD8]/50">
+                <div className="text-[10px] font-semibold mb-3 flex items-center justify-between">Beginner <span className="bg-white/20 px-2 py-0.5 rounded-full text-[8px] font-bold">Most popular</span></div>
+                <div className="text-4xl font-bold mb-2">$50<span className="text-xs font-medium opacity-70 ml-1">/monthly</span></div>
+                <div className="text-[9px] text-purple-200 leading-relaxed mt-4">Perfect for developers building web agents and data workflows.</div>
+            </div>
+            <div className="flex-1 bg-white border border-slate-200 rounded-2xl p-5 overflow-hidden shadow-sm">
+                <div className="text-[10px] font-semibold text-slate-800 mb-3">Enterprise</div>
+                <div className="text-4xl font-bold text-slate-900 mb-2">$90<span className="text-xs font-medium text-slate-400 ml-1">/monthly</span></div>
+                <div className="text-[9px] text-slate-500 leading-relaxed mt-4">Perfect for production apps scaling across teams globally.</div>
+            </div>
+         </div>
+      </div>
+    )
+  },
+  {
+    id: "03",
+    title: "Launch Your LMS",
+    description: "Receive access to a fully configured admin portal. Point your domain, brand the UI platform, upload your content, and you’re ready.",
+    image: (
+      <div className="w-full h-full bg-[#f8f9fc] relative flex flex-col p-6 shadow-inner">
+         <div className="flex items-center space-x-3 mb-6 opacity-60">
+             <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center text-white font-bold text-xs">🚀</div>
+             <div className="h-3 w-20 bg-slate-200 rounded"></div>
+         </div>
+         <div className="flex flex-1 gap-4">
+             <div className="w-[80px] h-full flex flex-col gap-3 border-r border-slate-200/60 pr-4 opacity-50">
+                <div className="h-2 w-10 bg-slate-300 rounded mb-2"></div>
+                <div className="h-6 w-full bg-slate-200 rounded-md"></div>
+                <div className="h-4 w-full bg-slate-100 rounded-md"></div>
+                <div className="h-4 w-full bg-slate-100 rounded-md"></div>
+             </div>
+             <div className="flex-1 flex flex-col space-y-4">
+                 <div className="flex items-center justify-between opacity-50">
+                     <div className="h-4 w-24 bg-slate-200 rounded"></div>
+                     <div className="w-6 h-6 rounded-full bg-purple-100"></div>
+                 </div>
+                 <div className="w-full bg-white rounded-xl shadow-sm border border-slate-100 p-4 relative overflow-hidden flex-1 flex flex-col justify-center items-center text-center">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-purple-50 rounded-bl-[100px] -mr-10 -mt-10"></div>
+                    <div className="w-12 h-12 bg-[#4427AD] rounded-full flex items-center justify-center text-white mb-4 shadow-lg shadow-[#4427AD]/20 z-10"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                    <div className="text-sm font-bold text-slate-800 z-10 mb-2">Welcome to your Dashboard</div>
+                    <div className="h-2 w-3/4 bg-slate-100 rounded-sm mx-auto z-10"></div>
+                 </div>
+             </div>
+         </div>
+      </div>
+    )
+  }
+];
+
+const LandingPage = () => {
+    return (
+        <div className="min-h-screen bg-[#F2F2F2] font-body overflow-x-clip">
+            <Navbar />
+
+            <div className="relative">
+                <AnimatedGridBackground />
+
+                <main id="home" className="relative z-10 scroll-mt-28 pt-36 lg:pt-44 pb-16 flex flex-col items-center justify-center overflow-hidden min-h-screen">
+                    <div className="max-w-4xl mx-auto px-6 text-center pt-4">
+                       <FloatingBadge />
+
+                       <HeroTitle />
+
+                       <p className="text-base sm:text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+                         A fully managed, white-label Learning Management System with custom domains, branding, and AI automation—built for modern Edtech leaders.
+                       </p>
+
+                       <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                         <Button
+                           variant="primary"
+                           size="lg"
+                           title="Request Demo"
+                           endIcon={<ChevronRight className="w-5 h-5" strokeWidth={2.5} />}
+                           className="w-full sm:w-auto"
+                         />
+                         <Button
+                           variant="glassy"
+                           size="lg"
+                           title="View Pricing"
+                           className="w-full sm:w-auto"
+                         />
+                       </div>
+                    </div>
+
+                    <div className="w-full px-4 overflow-hidden relative">
+                       <DashboardMockup />
+                    </div>
+                </main>
+            </div>
+
+            <CapabilitiesSection />
+
+            <ScrollStepsSection
+              steps={mockSteps}
+              intro={{
+                badgeIcon: <Rocket className="h-4 w-4 shrink-0 text-[#4427AD]" strokeWidth={2} />,
+                badgeLabel: 'Getting Started',
+                title: 'From demo to launch in a few simple steps',
+                description:
+                  'We handle the setup, customization, and infrastructure so you can focus on delivering education under your own brand.',
+              }}
+            />
+
+            <TestimonialsSection />
+
+            <FAQSection />
+
+            <FooterSection />
+        </div>
+    );
+};
+
+export default LandingPage;

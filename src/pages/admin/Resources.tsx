@@ -1,4 +1,3 @@
-import { EmployerPageHeader } from '@/components/employer/EmployerPageHeader'
 import { EmployerTableCard } from '@/components/employer/EmployerTableCard'
 import { ListingPageShell } from '@/components/listing'
 import { AdminLayout } from '@/components/layouts/AdminLayout'

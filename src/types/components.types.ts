@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from 'react'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'info' | 'danger' | 'warning' | 'orange' | 'light' | 'dark' | 'text'
+export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'info' | 'danger' | 'warning' | 'orange' | 'light' | 'dark' | 'text' | 'glassy'
 
 export type ButtonSize = 'sm' | 'md' | 'lg'
 

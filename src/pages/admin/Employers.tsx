@@ -33,10 +33,13 @@ function AdminEmployersCrudBody() {
   const page = Number(params.page) || 1
   const limit = Number(params.limit) || PAGE_SIZE
 
-  const [searchDraft, setSearchDraft] = useState(() => params.search ?? '')
-  useEffect(() => {
-    setSearchDraft(params.search ?? '')
-  }, [params.search])
+  const urlSearch = params.search ?? ''
+  const [searchDraft, setSearchDraft] = useState(urlSearch)
+  const [prevUrlSearch, setPrevUrlSearch] = useState(urlSearch)
+  if (urlSearch !== prevUrlSearch) {
+    setPrevUrlSearch(urlSearch)
+    setSearchDraft(urlSearch)
+  }
 
   useEffect(() => {
     const t = window.setTimeout(() => {

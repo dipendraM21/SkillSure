@@ -85,7 +85,7 @@ const AdminQuestions = () => {
   const [importNotice, setImportNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [stats, setStats] = useState({ active: 12, processing: 2, failed: 0 })
   const [view, setView] = useState<'list' | 'grid'>('list')
-  const [sets, setSets] = useState<QuestionSetRow[]>(INITIAL_SETS)
+  const [sets] = useState<QuestionSetRow[]>(INITIAL_SETS)
   const [activeById, setActiveById] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(INITIAL_SETS.map((s) => [s.id, s.id !== '2'])),
   )
