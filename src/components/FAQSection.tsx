@@ -6,28 +6,28 @@ import { LandingSectionHeading } from '@/components/landing/LandingSectionHeadin
 
 const faqs = [
   {
-    question: "Can I completely white-label the platform under my own brand?",
-    answer: "Absolutely. SkillSure runs entirely under your brand with zero SaaS watermarks. You can connect your own custom domain, use your logos, brand colors, and all automated emails/notifications are sent using your sender identity."
+    question: "Who can take the assessment?",
+    answer: "Only candidates who receive a valid assessment link from an employer can attempt the test."
   },
   {
-    question: "How do you protect my video content from piracy and illegal downloads?",
-    answer: "Our platform uses multi-DRM technology to encrypt video content. Videos are chopped into segments and securely delivered using signed URLs that change and expire dynamically, heavily mitigating illegal downloads and screen recording."
+    question: "Do candidates need to create an account?",
+    answer: "No. Candidates can start the assessment directly using the shared link. Basic details may be collected before starting."
   },
   {
-    question: "Does the platform support Indian payment gateways like UPI?",
-    answer: "Yes, we integrate seamlessly with major regional payment gateways like Razorpay, Cashfree, and PayU, supporting UPI, credit/debit cards, and net banking out-of-the-box."
+    question: "How are candidates evaluated?",
+    answer: "Evaluation is based on structured scoring. MCQs have fixed scores, while SJT questions use weighted options to measure decision making."
   },
   {
-    question: "I have an existing LMS. Can you help migrate my courses and students?",
-    answer: "Yes, our dedicated onboarding team assists with full data migrations. We can import bulk user accounts, structure your courses, and map over your video libraries efficiently so you experience zero downtime."
+    question: "What is adaptive or dynamic question flow?",
+    answer: "Some questions change based on previous answers. This helps assess candidates more accurately instead of showing the same path to everyone."
   },
   {
-    question: "Do you provide custom-branded mobile apps for Android and iOS?",
-    answer: "Yes! In addition to a highly responsive web application, we offer fully native, white-labeled mobile applications for both Android and iOS that we launch directly under your developer accounts."
+    question: "Can employers control test access?",
+    answer: "Yes. Employers can generate links, control availability, and manage candidate attempts easily."
   },
   {
-    question: "How does the AI analytics actually help my ed-tech business?",
-    answer: "Our AI systems automatically map student engagement trends to flag users who are likely to drop off. It grades assignments predictively and provides deep granular insights on exactly where students are pausing, rewinding, or struggling within video modules."
+    question: "What kind of insights are provided?",
+    answer: "You get detailed results including total score, section-wise performance, and behavioral insights from SJT responses."
   }
 ];
 
@@ -52,7 +52,7 @@ export const FAQSection = () => {
               <span className="text-[#4427AD]">answered clearly.</span>
             </>
           }
-          description="Everything you need to know about launching, securing, and scaling your educational platform with SkillSure."
+          description="Everything you need to know about creating assessments, evaluating candidates, and using the platform effectively."
         />
 
         {/* Content split: ~44% promo / ~56% accordion (matches reference proportions) */}

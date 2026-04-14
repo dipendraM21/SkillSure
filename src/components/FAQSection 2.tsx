@@ -53,7 +53,7 @@ export const FAQSection = () => {
           </h2>
           
           <p className="text-gray-500 text-lg md:text-[19px] max-w-2xl leading-relaxed">
-            Everything you need to know about launching, securing, and scaling your educational platform with Synappses.
+            Everything you need to know about creating assessments, evaluating candidates, and using the platform effectively.
           </p>
         </div>
 

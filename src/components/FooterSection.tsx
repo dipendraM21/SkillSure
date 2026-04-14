@@ -47,7 +47,7 @@ export const FooterSection = () => {
               <img src={skillsureLogo} alt="SkillSure Logo" className="h-5 w-auto" />
             </div>
             <p className="mb-8 max-w-[280px] text-[14.5px] leading-relaxed text-gray-500">
-              Empowering the next generation of educators with AI-driven tools, seamless UX, and global scalability.
+              Helping companies evaluate candidates with structured assessments, adaptive question flows, and real performance insights.
             </p>
 
             <div className="flex items-center space-x-5 text-gray-500">
@@ -70,9 +70,9 @@ export const FooterSection = () => {
             <h4 className="mb-4 sm:mb-6 text-[12px] font-semibold uppercase tracking-[0.12em] text-gray-400">Product</h4>
             <ul className="space-y-3.5">
               <li><a href="#" className="text-[14.5px] text-gray-600 transition-colors hover:text-gray-900">Platform Overview</a></li>
-              <li><a href="#" className="text-[14.5px] text-gray-600 transition-colors hover:text-gray-900">AI Course Builder</a></li>
+              <li><a href="#" className="text-[14.5px] text-gray-600 transition-colors hover:text-gray-900">Assessment Builder</a></li>
               <li className="flex items-center gap-2">
-                <a href="#" className="text-[14.5px] text-gray-600 transition-colors hover:text-gray-900">Integrations</a>
+                <a href="#" className="text-[14.5px] text-gray-600 transition-colors hover:text-gray-900">Candidate Evaluation</a>
                 <span className="rounded-full bg-purple-100/80 px-2 py-0.5 text-[10px] font-bold uppercase text-[#4427AD]">New</span>
               </li>
               <li><a href="#" className="text-[14.5px] text-gray-600 transition-colors hover:text-gray-900">Pricing</a></li>

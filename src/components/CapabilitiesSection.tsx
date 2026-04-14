@@ -192,47 +192,47 @@ export const CapabilitiesSection = () => {
           badgeIcon={<Sparkles className="h-4 w-4 shrink-0 text-[#4427AD]" strokeWidth={2} />}
           badgeLabel="Core Platform Capabilities"
           badgeTone="neutral"
-          titleClassName="font-semibold text-2xl leading-[1.15] tracking-tight text-neutral-900 sm:text-3xl md:text-5xl dark:text-white"
+          titleClassName="font-normal text-2xl leading-[1.15] tracking-tight text-neutral-900 sm:text-3xl md:text-5xl dark:text-white"
           descriptionClassName="w-full text-base leading-7 text-neutral-500 sm:text-lg md:text-xl dark:text-neutral-400"
           title={
             <>
-              A learning platform built <br className="hidden md:block" /> to look like your own product
+              A smart assessment platform <br className="hidden md:block" /> built for hiring decisions
             </>
           }
-          description="Designed for ed-tech businesses that need full branding control, scalable infrastructure, and modern learning workflows."
+          description="Evaluate candidates using structured tests, SJT, and adaptive question flows giving employers clear, reliable hiring insights."
         />
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <CapabilityFeatureCard
-            title="AI-Assisted Insights"
-            description="AI-powered analytics identify struggling students before they fall behind, reduces teacher workload, and provides decision-ready analytics on progress."
+            title="Standardized Evaluation System"
+            description="Create assessments using MCQs, data-based questions, and scenario-driven formats. Ensure consistent and role-specific evaluation for every candidate."
             illustration={<BarChartAnimation />}
           />
 
           <CapabilityFeatureCard
-            title="Drag & Drop Builder"
-            description="Manage your courses and lessons with a smooth, drag-and-drop interface. Create courses, modules, sections, lessons or schedule classes seamlessly."
+            title="SJT & Behavioral Analysis"
+            description="Evaluate real-world decision making using situational judgment tests where each option carries weighted scoring to measure candidate behavior and thinking."
             illustration={<DragDropAnimation />}
           />
 
           <CapabilityFeatureCard
-            title="Test Scheduling"
-            description="Organises learners into structured cohorts, automates assignments, tests, and milestones to keep students progressing on schedule."
+            title="Adaptive Question Flow"
+            description="Control how questions appear based on candidate responses. Build conditional question paths that adapt during the assessment."
             illustration={<SchedulingAnimation />}
           />
 
           <CapabilityFeatureCard
             layout="wide"
             className="lg:col-span-2"
-            title="Complete Brand Control"
-            description="Use the platform completely as your own brand. Custom domains, colours, logos, and messaging templates in the admin panel, all while keeping the underlying SaaS technology hidden."
+            title="Employer Test Control"
+            description="Generate and share assessment links, control access, and manage candidate attempts without manual intervention."
             illustration={<BrandAnimation />}
           />
 
           <CapabilityFeatureCard
-            title="Announcement & Notifications"
-            description="Broadcast announcements, course updates, and critical notifications across the entire platform instantly via in-app and emails."
+            title="Real-Time Results & Insights"
+            description="Track candidate performance instantly with detailed scoring, section-wise analysis, and overall evaluation metrics."
             illustration={<BellNotificationAnimation />}
           />
         </div>

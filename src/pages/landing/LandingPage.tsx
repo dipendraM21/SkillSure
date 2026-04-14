@@ -266,12 +266,12 @@ const Navbar = () => {
 const FloatingBadge = () => (
     <div className="inline-flex items-center px-1.5 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-[#DDD6FE] shadow-sm mb-8 relative z-10">
         <span className="bg-[#4427AD] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
-        <span className="text-[#4427AD] text-xs font-semibold px-4 tracking-wide uppercase">AI Course Generation</span>
+        <span className="text-[#4427AD] text-xs font-semibold px-4 tracking-wide uppercase">Smart Candidate Assessment</span>
     </div>
 );
 
 const HeroTitle = () => {
-    const words = ["manage", "scale", "build"];
+    const words = ["assess", "evaluate", "hire"];
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
@@ -298,7 +298,7 @@ const HeroTitle = () => {
                         {words[index]}
                     </motion.span>
                 </AnimatePresence>
-            </span> your ed-tech
+            </span> talent
         </h1>
     );
 };
@@ -317,12 +317,12 @@ const DashboardMockup = () => (
              <div className="flex flex-col space-y-2 w-full">
                  {[
                      { icon: LayoutGrid, text: 'Dashboard', active: true },
-                     { icon: BookOpen, text: 'Courses' },
-                     { icon: Copy, text: 'Profile' },
-                     { icon: Bell, text: 'Announcements' },
-                     { icon: Activity, text: 'Assignments' },
-                     { icon: Activity, text: 'Quiz' },
-                     { icon: Activity, text: 'Discussions' },
+                     { icon: BookOpen, text: 'Assessments' },
+                     { icon: Copy, text: 'Question Bank' },
+                     { icon: Bell, text: 'Candidates' },
+                     { icon: Activity, text: 'Results' },
+                     { icon: Activity, text: 'Reports' },
+                     { icon: Activity, text: 'Settings' },
                  ].map((item, i) => (
                      <div key={i} className={`flex items-center px-3 py-2.5 rounded-xl cursor-pointer transition ${item.active ? 'bg-gray-100 text-gray-900 font-semibold' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}>
                          <item.icon className={`w-5 h-5 mr-3 ${item.active ? 'text-gray-800' : 'text-gray-400'}`} strokeWidth={2}/>
@@ -347,7 +347,7 @@ const DashboardMockup = () => (
          {/* Main Content Area */}
          <div className="flex-1 lg:pl-10 lg:pr-4 pt-6">
             <div className="flex items-center justify-between mb-8 w-full">
-                <h1 className="text-base sm:text-2xl font-semibold text-gray-900 truncate">Hi Jatin, <span className="font-normal text-gray-500 hidden sm:inline">Good Morning 👋</span></h1>
+                <h1 className="text-base sm:text-2xl font-medium text-gray-900 truncate">Hi Heel, <span className="font-normal text-gray-500 hidden sm:inline">Good Morning 👋</span></h1>
                 <div className="flex items-center space-x-4">
                     <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center relative cursor-pointer">
                         <Bell className="w-5 h-5 text-gray-600" />
@@ -363,12 +363,12 @@ const DashboardMockup = () => (
             {/* Purple Banner */}
             <div className="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl sm:rounded-3xl p-5 sm:p-10 text-white relative overflow-hidden shadow-lg shadow-purple-500/20">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                <div className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium mb-6">Explore Learning</div>
-                <h2 className="text-2xl sm:text-4xl font-bold mb-4 leading-tight max-w-md">Diverse Courses for<br/>Your Growth</h2>
-                <p className="text-purple-100 mb-8 max-w-lg text-sm leading-relaxed">Master new skills with expert-led courses. Learn at your own pace with hands-on projects and real-world applications.</p>
+                <div className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-normal mb-6">Overview</div>
+                <h2 className="text-2xl sm:text-4xl font-medium mb-4 leading-tight max-w-md">Evaluate candidates<br/>with clarity</h2>
+                <p className="text-purple-100 mb-8 max-w-lg text-sm leading-relaxed">Create structured assessments, share links, and track real performance in one place.</p>
                 <div className="flex items-center space-x-4 relative z-10">
-                    <button className="bg-[#1a1a24] text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg hover:bg-black transition">Explore Courses</button>
-                    <button className="bg-transparent border border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-xl text-sm font-semibold transition backdrop-blur-sm">How it works</button>
+                    <button className="bg-[#1a1a24] text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg hover:bg-black transition">Create Assessment</button>
+                    <button className="bg-transparent border border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-xl text-sm font-semibold transition backdrop-blur-sm">View Results</button>
                 </div>
             </div>
             
@@ -419,8 +419,8 @@ const DashboardMockup = () => (
 const mockSteps: StepData[] = [
   {
     id: "01",
-    title: "Schedule a Demo",
-    description: "Start by booking a personalized demo. We walk you through the platform, understand your business model, and discuss how you plan to deliver learning.",
+    title: "Create Your Assessment",
+    description: "Build tests using MCQs, SJT, data-based questions, and adaptive flows based on role and industry.",
     image: (
       <div className="w-full h-full bg-[#f8f9fc] flex flex-col justify-center items-center relative p-6">
         <div className="absolute top-4 left-4 flex space-x-1.5 opacity-60">
@@ -455,8 +455,8 @@ const mockSteps: StepData[] = [
   },
   {
     id: "02",
-    title: "Get a custom plan",
-    description: "Based on your requirements—courses, cohorts, monetization, branding, and scale—we design a custom plan tailored to your usage and growth.",
+    title: "Share Assessment Link",
+    description: "Generate a secure link and invite candidates directly — no manual setup required.",
     image: (
       <div className="w-full h-full bg-white flex flex-col pt-8 relative border-t-8 border-gray-50">
          <div className="absolute top-[-2px] left-4 flex space-x-1.5 opacity-50">
@@ -465,7 +465,7 @@ const mockSteps: StepData[] = [
            <div className="w-2 h-2 rounded-full bg-green-400"></div>
          </div>
          <div className="text-center mt-6">
-           <h3 className="text-2xl font-bold text-gray-900 tracking-tight leading-snug">Plans designed to match<br/>your <span className="text-[#4427AD]">learning goals.</span></h3>
+           <h3 className="text-2xl font-bold text-gray-900 tracking-tight leading-snug">Plans designed for<br/>your <span className="text-[#4427AD]">smarter hiring</span></h3>
            <div className="flex justify-center mt-6">
               <div className="bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-medium z-10 mr-[-10px] shadow-sm">Monthly Billing</div>
               <div className="bg-white border border-gray-200 text-slate-700 px-4 py-1.5 pl-6 flex items-center rounded-r-full text-[10px] font-medium z-0">Annual Billing <span className="ml-2 bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-[8px] font-bold tracking-wide">Save 20%</span></div>
@@ -488,8 +488,8 @@ const mockSteps: StepData[] = [
   },
   {
     id: "03",
-    title: "Launch Your LMS",
-    description: "Receive access to a fully configured admin portal. Point your domain, brand the UI platform, upload your content, and you’re ready.",
+    title: "Evaluate & Analyze Results",
+    description: "Track performance with detailed scoring, behavioral insights, and real-time evaluation. ",
     image: (
       <div className="w-full h-full bg-[#f8f9fc] relative flex flex-col p-6 shadow-inner">
          <div className="flex items-center space-x-3 mb-6 opacity-60">
@@ -536,7 +536,7 @@ const LandingPage = () => {
                        <HeroTitle />
 
                        <p className="text-base sm:text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
-                         A fully managed, white-label Learning Management System with custom domains, branding, and AI automation—built for modern Edtech leaders.
+                         A complete assessment platform to evaluate candidates using structured tests, behavioral analysis, and real performance insights.
                        </p>
 
                        <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -550,7 +550,7 @@ const LandingPage = () => {
                          <Button
                            variant="glassy"
                            size="lg"
-                           title="View Pricing"
+                           title="Start Assessment"
                            className="w-full sm:w-auto"
                          />
                        </div>
@@ -569,9 +569,9 @@ const LandingPage = () => {
               intro={{
                 badgeIcon: <Rocket className="h-4 w-4 shrink-0 text-[#4427AD]" strokeWidth={2} />,
                 badgeLabel: 'Getting Started',
-                title: 'From demo to launch in a few simple steps',
+                title: 'From test creation to candidate evaluation in simple steps',
                 description:
-                  'We handle the setup, customization, and infrastructure so you can focus on delivering education under your own brand.',
+                  'Set up your assessment, share it with candidates, and get structured insights all in a streamlined workflow.',
               }}
             />
 

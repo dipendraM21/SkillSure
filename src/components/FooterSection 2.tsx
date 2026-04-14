@@ -19,17 +19,17 @@ export const FooterSection = () => {
            {/* CTA Content */}
            <div className="relative z-10 max-w-xl text-center md:text-left mb-8 md:mb-0">
              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4 tracking-tight">
-               Start your teaching<br />journey today
+               Start evaluating candidates<br />smarter today
              </h2>
              <p className="text-white/90 text-lg leading-relaxed max-w-md">
-               Launch your first course in under 5 minutes with our AI-powered LMS dashboard. Join 100+ creators.
+               Create structured assessments, share with candidates, and get real insights into skills and decision making in minutes.
              </p>
            </div>
 
            {/* CTA Button */}
            <div className="relative z-10">
              <button className="bg-white hover:bg-gray-50 text-[#0055ff] transition-colors shadow-sm font-semibold text-[16px] px-8 py-4 rounded-xl flex items-center justify-center whitespace-nowrap">
-               Schedule Demo
+               Request Demo
              </button>
            </div>
         </div>
@@ -48,7 +48,7 @@ export const FooterSection = () => {
               Synappses
             </div>
             <p className="text-gray-500 text-[14.5px] leading-relaxed mb-8 max-w-[280px]">
-              Empowering the next generation of educators with AI-driven tools, seamless UX, and global scalability.
+              Helping companies evaluate candidates with structured assessments, adaptive question flows, and real performance insights.
             </p>
             
             <div className="flex items-center space-x-5 text-gray-600">
