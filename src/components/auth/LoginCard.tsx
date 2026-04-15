@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
 interface LoginCardProps extends PropsWithChildren {
-  title: string;
+  title: React.ReactNode;
   description: string;
 }
 

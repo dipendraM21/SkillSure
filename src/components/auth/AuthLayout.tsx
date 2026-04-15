@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { LayoutDashboard } from 'lucide-react';
+import skillsureLogo from '@/assets/svg/skillsure-logo-full.svg'
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
   return (
@@ -15,11 +15,8 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
         <div className="w-full max-w-[480px]">
           {/* Logo Section */}
           <div className="flex flex-col items-center mb-10 text-center">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-                <LayoutDashboard className="text-white w-6 h-6" />
-              </div>
-              <span className="text-3xl font-heading font-extrabold tracking-tighter text-primary">SkillSure</span>
+            <div className="mb-4 flex items-center">
+              <img src={skillsureLogo} alt="SkillSure" className="h-8 w-auto" />
             </div>
             <p className="text-text-secondary-default font-medium tracking-tight">The Cognitive Sanctuary Workspace</p>
           </div>
@@ -31,8 +28,8 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
       {/* Footer */}
       <footer className="w-full py-8 mt-auto border-t border-main-border/20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-text-primary-default">SkillSure</span>
+          <div className="flex items-center gap-3">
+            <img src={skillsureLogo} alt="SkillSure" className="h-5 w-auto" />
             <span className="text-xs font-normal text-text-secondary-default italic">© 2024 SkillSure. Cognitive Sanctuary Design.</span>
           </div>
           <div className="flex gap-6">
