@@ -3,6 +3,8 @@ import LoginCard from '@/components/auth/LoginCard'
 import { Button } from '@/components/core/Button/Button'
 import { FormField } from '@/components/crud/commonHelper/formValidation/FormField'
 import { appRoutes } from '@/lib/utils/routes'
+import { setSession } from '@/lib/auth/session'
+import type { OptionType } from '@/types/components.types'
 import { ArrowLeft, ArrowRight, Mail, Phone, RefreshCw, ShieldCheck } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form'
@@ -12,7 +14,22 @@ import OtpInput from '@/components/core/TextInputField/OtpInput'
 
 type LoginStep = 'IDENTIFIER' | 'OTP'
 
+type LoginAsRole = 'candidate' | 'admin'
+
+const LOGIN_AS_OPTIONS: OptionType[] = [
+  { value: 'candidate', label: 'Candidate' },
+  { value: 'admin', label: 'Admin' },
+]
+
+/**
+ * Auth card fields — must stay aligned with `Select` `variant="authCard"` in Select.tsx
+ * (`!` overrides `.form-input` from forms.css: py-2, rounded-md, faint border, no shadow)
+ */
+const LOGIN_AUTH_FIELD_CLASS =
+  '!h-12 !min-h-12 !rounded-[12px] !border !border-slate-300 !bg-white !py-[13px] !text-sm !font-semibold !shadow-[0_12px_28px_-20px_rgba(37,99,235,0.55)] !outline-none transition-all placeholder:text-slate-400 focus:!border-primary focus:!bg-white focus:!shadow-[0_16px_34px_-18px_rgba(37,99,235,0.35)] focus:!ring-0'
+
 type IdentifierFormValues = {
+  loginAs: LoginAsRole
   identifier: string
 }
 
@@ -24,11 +41,12 @@ export const Login = () => {
   const navigate = useNavigate()
   const [step, setStep] = useState<LoginStep>('IDENTIFIER')
   const [contactTarget, setContactTarget] = useState('')
+  const [pendingLoginAs, setPendingLoginAs] = useState<LoginAsRole>('candidate')
   const [timer, setTimer] = useState(30)
   const [isResending, setIsResending] = useState(false)
 
   const identifierMethods = useForm<IdentifierFormValues>({
-    defaultValues: { identifier: '' },
+    defaultValues: { loginAs: 'candidate', identifier: '' },
     mode: 'onTouched',
   })
 
@@ -82,10 +100,11 @@ export const Login = () => {
     return `${prefix}${mask}${suffix}`
   }
 
-  const onSubmitIdentifier = ({ identifier }: IdentifierFormValues) => {
+  const onSubmitIdentifier = ({ identifier, loginAs }: IdentifierFormValues) => {
     const sanitized = identifier.trim()
     const phoneMode = /^\d/.test(sanitized)
     const normalizedIdentifier = phoneMode ? sanitized.replace(/\D/g, '') : sanitized
+    setPendingLoginAs(loginAs)
     setContactTarget(normalizedIdentifier)
     setStep('OTP')
     setTimer(30)
@@ -99,8 +118,17 @@ export const Login = () => {
       return
     }
 
+    setSession({
+      role: pendingLoginAs,
+      accessToken: `demo-${pendingLoginAs}-token`,
+      email: contactTarget.includes('@') ? contactTarget : undefined,
+    })
     toast.success('Logged in successfully')
-    navigate(appRoutes.home, { replace: true })
+    if (pendingLoginAs === 'admin') {
+      navigate(appRoutes.admin.dashboard, { replace: true })
+    } else {
+      navigate(appRoutes.candidate.welcome, { replace: true })
+    }
   }
 
   const resendOtp = async () => {
@@ -121,12 +149,22 @@ export const Login = () => {
           <FormProvider {...identifierMethods}>
             <form onSubmit={identifierMethods.handleSubmit(onSubmitIdentifier)} className="space-y-7">
               <FormField
+                name="loginAs"
+                type="select"
+                label="Login As"
+                variant="authCard"
+                options={LOGIN_AS_OPTIONS}
+                isClearable={false}
+                className="w-full"
+                validateRule={{ required: true }}
+              />
+              <FormField
                 name="identifier"
                 type="text"
                 label="Email or Phone"
                 placeholder="name@company.com or 9876543210"
                 startIcon={inputIcon}
-                className="rounded-2xl border border-main-border/35 bg-white py-3.5 shadow-[0_12px_28px_-20px_rgba(37,99,235,0.55)] transition-all focus:border-primary/70 focus:bg-white focus:shadow-[0_16px_34px_-18px_rgba(37,99,235,0.35)]"
+                className={LOGIN_AUTH_FIELD_CLASS}
                 inputMode={isPhoneMode ? 'numeric' : 'email'}
                 maxLength={isPhoneMode ? 10 : 320}
                 rules={{

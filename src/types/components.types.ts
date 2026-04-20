@@ -39,6 +39,8 @@ export interface OptionType {
   label: string
 }
 
+export type SelectVariant = 'default' | 'authCard'
+
 export interface SelectProps {
   value: string | number | (string | number)[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,6 +48,8 @@ export interface SelectProps {
   options: OptionType[]
   onBlur?: () => void
   placeholder?: string
+  /** Matches large bordered inputs (e.g. auth login fields). */
+  variant?: SelectVariant
   [key: string]: unknown
 }
 

@@ -1,4 +1,5 @@
 import { FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form'
+import type { SelectVariant } from '@/types/components.types'
 
 export interface ValidationError {
   errors?: {
@@ -91,6 +92,8 @@ export interface FormFieldProps extends React.HTMLAttributes<HTMLElement> {
   step?: number | string
   multiple?: boolean
   accept?: string
+  /** Passed through to `Select` when `type` is `select`. */
+  variant?: SelectVariant
 }
 
 export interface OtpInputProps {

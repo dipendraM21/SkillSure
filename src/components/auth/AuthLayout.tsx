@@ -13,13 +13,13 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
       {/* Main Content */}
       <main className="flex-grow flex items-center justify-center p-6 bg-transparent">
         <div className="w-full max-w-[480px]">
-          {/* Logo Section */}
-          <div className="flex flex-col items-center mb-10 text-center">
-            <div className="mb-4 flex items-center">
-              <img src={skillsureLogo} alt="SkillSure" className="h-8 w-auto" />
-            </div>
-            <p className="text-text-secondary-default font-medium tracking-tight">The Cognitive Sanctuary Workspace</p>
-          </div>
+          {/* Brand — left-aligned to match form card edge */}
+          <header className="mb-10 flex flex-col items-start gap-2 text-left">
+            <img src={skillsureLogo} alt="SkillSure" className="h-9 w-auto md:h-10" />
+            <p className="max-w-[20rem] text-sm font-medium leading-snug tracking-tight text-text-secondary-default">
+              The Cognitive Sanctuary Workspace
+            </p>
+          </header>
 
           {children}
         </div>
